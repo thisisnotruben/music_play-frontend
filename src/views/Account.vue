@@ -1,6 +1,7 @@
 <script setup lang="ts">
+import AccountDialogs from '@/components/AccountDialogs.vue';
 import BaseLayout from '@/layouts/BaseLayout.vue';
-import { KeyRound, Mail, Pencil, User } from '@lucide/vue';
+import { Eye, EyeClosed, KeyRound, Mail, Pencil, User } from '@lucide/vue';
 
 const props = withDefaults(defineProps<{
     username: string
@@ -27,12 +28,15 @@ const props = withDefaults(defineProps<{
                         Account Information
                     </strong>
                 </h2>
-
+                
                 <div class="divider "></div>
-
+                
                 <p class="text-center">
                     View and/or edit your account.
                 </p>
+
+                <AccountDialogs :username="username" :password="password" :email="email" :first-name="firstName"
+                    :last-name="lastName"></AccountDialogs>
             </div>
 
             <div class="bg-base-200 border-base-300 p-6">
@@ -50,7 +54,7 @@ const props = withDefaults(defineProps<{
                         Username:
                     </span>
                     <span>{{ username }}</span>
-                    <button class="btn btn-neutral">
+                    <button class="btn btn-neutral" onclick="username_edit.showModal()">
                         <Pencil />
                         Edit
                     </button>
@@ -59,8 +63,20 @@ const props = withDefaults(defineProps<{
                         <KeyRound />
                         Password:
                     </span>
-                    <span>{{ password }}</span>
-                    <button class="btn btn-neutral">
+                    <span>
+                        <label class="swap">
+                            <input type="checkbox" />
+                            <span class="swap-on flex gap-2">
+                                <EyeClosed />
+                                {{ password }}
+                            </span>
+                            <span class="swap-off flex gap-2">
+                                <Eye />
+                                {{ '*'.repeat(password.length) }}
+                            </span>
+                        </label>
+                    </span>
+                    <button class="btn btn-neutral" onclick="password_edit.showModal()">
                         <Pencil />
                         Edit
                     </button>
@@ -70,7 +86,7 @@ const props = withDefaults(defineProps<{
                         Email:
                     </span>
                     <span>{{ email }}</span>
-                    <button class="btn btn-neutral">
+                    <button class="btn btn-neutral" onclick="email_edit.showModal()">
                         <Pencil />
                         Edit
                     </button>
@@ -90,14 +106,14 @@ const props = withDefaults(defineProps<{
 
                     <span class="field-label">First Name:</span>
                     <span>{{ firstName }}</span>
-                    <button class="btn btn-neutral">
+                    <button class="btn btn-neutral" onclick="firstName_edit.showModal()">
                         <Pencil />
                         Edit
                     </button>
 
                     <span class="field-label">Last Name:</span>
                     <span>{{ lastName }}</span>
-                    <button class="btn btn-neutral">
+                    <button class="btn btn-neutral" onclick="lastName_edit.showModal()">
                         <Pencil />
                         Edit
                     </button>

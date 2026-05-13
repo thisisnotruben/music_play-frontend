@@ -1,22 +1,30 @@
 <script setup lang="ts">
 import BaseLayout from '@/layouts/BaseLayout.vue';
-import { KeyRound, User, LogIn } from '@lucide/vue';
+import { Eye, EyeClosed, KeyRound, LogIn, User } from '@lucide/vue';
+import { ref } from 'vue';
+
+const textView = ref(false);
 </script>
 
 <template>
-    <BaseLayout >
+    <BaseLayout>
         <div class="login-container">
             <fieldset class="fieldset bg-base-200 border-base-300 w-xs p-6">
                 <legend class="fieldset-legend">Login</legend>
 
                 <label class="input">
                     <User />
-                    <input type="email" placeholder="Username" />
+                    <input type="text" placeholder="Username" />
                 </label>
 
                 <label class="input">
                     <KeyRound />
-                    <input type="password" placeholder="Password" />
+                    <input :type="textView ? 'text' : 'password'" placeholder="Password" />
+                    <label class="swap">
+                        <input type="checkbox" @click="textView = !textView" />
+                        <EyeClosed class="swap-on" />
+                        <Eye class="swap-off" />
+                    </label>
                 </label>
 
                 <button class="btn btn-neutral mt-4">
