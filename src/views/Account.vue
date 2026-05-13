@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import AccountDialogs from '@/components/AccountDialogs.vue';
+import AccountDialogEntry from '@/components/AccountDialogEntry.vue';
 import BaseLayout from '@/layouts/BaseLayout.vue';
 import { Eye, EyeClosed, KeyRound, Mail, Pencil, User } from '@lucide/vue';
 
@@ -28,18 +28,29 @@ const props = withDefaults(defineProps<{
                         Account Information
                     </strong>
                 </h2>
-                
+
                 <div class="divider "></div>
-                
+
                 <p class="text-center">
                     View and/or edit your account.
                 </p>
-
-                <AccountDialogs :username="username" :password="password" :email="email" :first-name="firstName"
-                    :last-name="lastName"></AccountDialogs>
             </div>
 
             <div class="bg-base-200 border-base-300 p-6">
+                <AccountDialogEntry id="username_edit" header="Username" body-key="Current Username"
+                    :body-value="username" input-placeholder="New Username" type="username"
+                    validator-hint="Must be >= 4 characters and <= 24 characters.">
+                </AccountDialogEntry>
+
+                <AccountDialogEntry id="password_edit" header="Password" body-key="Current Password"
+                    :body-value="password" input-placeholder="New Password" type="password"
+                    validator-hint="Passwords must match.">
+                </AccountDialogEntry>
+
+                <AccountDialogEntry id="email_edit" header="Email" body-key="Current Email" :body-value="email"
+                    input-placeholder="New Email" type="email" validator-hint="Must be a proper email format.">
+                </AccountDialogEntry>
+
                 <h3>
                     <strong>
                         Account Info
@@ -94,6 +105,16 @@ const props = withDefaults(defineProps<{
             </div>
 
             <div class="bg-base-200 border-base-300 p-6">
+                <AccountDialogEntry id="firstName_edit" header="First Name" body-key="Current First Name"
+                    :body-value="firstName" input-placeholder="Edit First Name" type="firstName"
+                    validator-hint="Cannot be blank.">
+                </AccountDialogEntry>
+
+                <AccountDialogEntry id="lastName_edit" header="Last Name" body-key="Current Last Name"
+                    :body-value="lastName" input-placeholder="Edit Last Name" type="lastName"
+                    validator-hint="Cannot be blank.">
+                </AccountDialogEntry>
+
                 <h3>
                     <strong>
                         Personal Info
