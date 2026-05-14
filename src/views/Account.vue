@@ -47,8 +47,8 @@ const props = withDefaults(defineProps<{
                     validator-hint="Passwords must match.">
                 </AccountDialogEntry>
 
-                <AccountDialogEntry id="email_edit" header="Email" body-key="Current Email" :body-value="email"
-                    input-placeholder="New Email" type="email" validator-hint="Must be a proper email format.">
+                <AccountDialogEntry id="email_edit" header="E-mail" body-key="Current E-mail" :body-value="email"
+                    input-placeholder="New E-mail" type="email" validator-hint="Must be a proper e-mail format.">
                 </AccountDialogEntry>
 
                 <h3>

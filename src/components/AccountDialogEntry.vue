@@ -62,18 +62,18 @@ const confirmTextView = ref(false);
                             <Eye class="swap-off" />
                         </label>
                     </label>
-                    <p class="validator-hint hidden">Must be >= 8 characters and <= 24 characters.</p>
+                    <p class="validator-hint hidden">Must be &gt;= 8 characters and &lt;= 24 characters.</p>
 
-                            <label class="input validator">
-                                <KeyRound />
-                                <input :type="confirmTextView ? 'text' : 'password'" :pattern="newPassword" required
-                                    placeholder="Confirm Password" />
-                                <label class="swap">
-                                    <input type="checkbox" @click="confirmTextView = !confirmTextView" />
-                                    <EyeClosed class="swap-on" />
-                                    <Eye class="swap-off" />
-                                </label>
-                            </label>
+                    <label class="input validator">
+                        <KeyRound />
+                        <input :type="confirmTextView ? 'text' : 'password'" :pattern="newPassword" required
+                            placeholder="Confirm Password" />
+                        <label class="swap">
+                            <input type="checkbox" @click="confirmTextView = !confirmTextView" />
+                            <EyeClosed class="swap-on" />
+                            <Eye class="swap-off" />
+                        </label>
+                    </label>
                 </template>
 
                 <template v-else-if="type === 'username'">
