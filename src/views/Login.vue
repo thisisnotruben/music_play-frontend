@@ -30,7 +30,7 @@ const textView = ref(false);
                         </label>
                     </label>
 
-                    <button class="btn btn-primary" type="submit">
+                    <button class="btn btn-primary" type="submit" @click="$router.push({ name: 'home' })">
                         <LogIn /> Login
                     </button>
                 </form>
@@ -51,7 +51,6 @@ const textView = ref(false);
     display: flex;
     align-items: center;
     justify-content: center;
-    min-height: 100vh;
     max-width: 100%;
 }
 

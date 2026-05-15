@@ -6,16 +6,26 @@ const appName = 'Music Play';
 </script>
 
 <template>
-    <Header :app-name="appName"></Header>
-    <main>
-        <slot></slot>
-    </main>
-    <Footer :app-name="appName"></Footer>
+    <div class="main-container flex flex-col">
+        <Header :app-name="appName"></Header>
+        <main class="flex-1">
+            <slot></slot>
+        </main>
+        <Footer :app-name="appName"></Footer>
+    </div>
 </template>
 
-<style scoped>
-main {
-    min-height: 100vh;
+<style>
+body {
+    height: 100vh;
+}
+
+#app,
+.main-container {
+    height: inherit;
+}
+
+main>*:first-child {
+    height: -webkit-fill-available;
 }
 </style>
-    

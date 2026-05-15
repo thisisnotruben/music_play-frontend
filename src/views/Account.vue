@@ -151,7 +151,6 @@ const props = withDefaults(defineProps<{
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    min-height: 100vh;
     gap: 2rem;
 }
 
