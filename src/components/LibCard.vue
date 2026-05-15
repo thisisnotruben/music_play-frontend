@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import type { Song } from '@/scripts/types';
+import type { SongContainerHandler } from '@/scripts/types';
 import { Play } from '@lucide/vue';
 import { ref } from 'vue';
 
 const props = defineProps<{
-    song: Song
+    songContainerHandler: SongContainerHandler
 }>();
 
 const onHover = ref(false);
@@ -12,18 +12,20 @@ const onHover = ref(false);
 </script>
 
 <template>
-    <div class="card" @mouseover="onHover = true" @mouseout="onHover = false">
+    <figure @mouseover="onHover = true" @mouseout="onHover = false">
 
-        <figure>
-            <img :src="song.coverPath" />
-            <figcaption>{{ song.name }}</figcaption>
-        </figure>
+        <div class="relative">
+            <img class="w-32" :src="songContainerHandler.getSongContainer().coverPath" />
+            <button v-show="onHover" class="btn btn-circle absolute right-1 bottom-1">
+                <Play />
+            </button>
+        </div>
+        <figcaption>
+            {{ songContainerHandler.getSongContainer().name }}
+        </figcaption>
 
-        <button v-show="onHover" class="btn btn-circle">
-            <Play />
-        </button>
 
-    </div>
+    </figure>
 </template>
 
 <style scoped></style>

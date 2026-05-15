@@ -7,13 +7,11 @@ const props = defineProps<{
 </script>
 
 <template>
-    <div class="navbar-start flex items-center gap-2 w-full" @click="songContainerHandler.goTo()">
+    <figure class="flex items-center gap-2 w-full" @click="songContainerHandler.goTo()">
         <img class="h-8 ml-4" :src="songContainerHandler.getSongContainer().coverPath" />
-        <div class="flex flex-col">
+        <figcaption class="flex flex-col">
             <strong>{{ songContainerHandler.getSongContainer().name }}</strong>
             <span>{{ songContainerHandler.getType() }}</span>
-        </div>
-    </div>
+        </figcaption>
+    </figure>
 </template>
-
-<style scoped></style>
