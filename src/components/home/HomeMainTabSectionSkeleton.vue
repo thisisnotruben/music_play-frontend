@@ -4,7 +4,7 @@ import LibCard from '../LibCard.vue';
 </script>
 
 <template>
-    <ul class="list">
+    <ul class="list max-h-180">
         <template v-for="[_, entries] in musicPlayService.getDummyMusic(4, 12)">
 
             <li class="list-row flex flex-col">

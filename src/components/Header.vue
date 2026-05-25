@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { AudioWaveform, House, Info, Keyboard, LogOut, Search, SquareUser, User } from '@lucide/vue';
+import { ArrowBigDownDash, AudioWaveform, House, Info, Keyboard, LogOut, Search, SquareUser, User } from '@lucide/vue';
 import { useKeyModifier, useMagicKeys } from '@vueuse/core';
 import { ref, watchEffect } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
@@ -53,7 +53,9 @@ document.onkeydown = function (e: KeyboardEvent) {
                     <input type="text" placeholder="What do you want to play?" class="w-64" />
                     <span class="flex items-center gap-2 text-sm">
                         Ctrl-K
-                        <Keyboard />
+                        <button class="btn btn-circle btn-ghost btn-sm" @click="showPopupSearch = true">
+                            <Keyboard />
+                        </button>
                     </span>
                 </label>
             </div>
@@ -67,19 +69,25 @@ document.onkeydown = function (e: KeyboardEvent) {
 
                     <ul tabindex="-1" class="menu dropdown-content bg-base-300">
                         <li>
-                            <button class="btn btn-ghost" @click="$router.push({ name: 'account' })">
+                            <button class="btn btn-ghost justify-between" @click="$router.push({ name: 'home' })">
+                                <House />
+                                <span>Home</span>
+                            </button>
+                        </li>
+                        <li>
+                            <button class="btn btn-ghost justify-between" @click="$router.push({ name: 'account' })">
                                 <User />
                                 <span>Account</span>
                             </button>
                         </li>
                         <li>
-                            <button class="btn btn-ghost" @click="$router.push({ name: 'about' })">
+                            <button class="btn btn-ghost justify-between" @click="$router.push({ name: 'about' })">
                                 <Info />
                                 <span>About</span>
                             </button>
                         </li>
                         <li>
-                            <button class="btn btn-ghost" onclick="logout_model.showModal()">
+                            <button class="btn btn-ghost justify-between" onclick="logout_model.showModal()">
                                 <LogOut />
                                 <span>Logout</span>
                             </button>
@@ -105,11 +113,19 @@ document.onkeydown = function (e: KeyboardEvent) {
     </dialog>
 
     <dialog id="logout_model" class="modal">
-        <div class="modal-box w-48 bg-base-300 text-base-content">
-            <h3 class="text-center"><strong>Logout?</strong></h3>
+        <div class="modal-box w-80 bg-base-300 text-base-content">
+            <h3 class="text-center underline underline-offset-8 text-lg">
+                <strong>Logout?</strong>
+            </h3>
             <form class="modal-action" method="dialog">
-                <button class="btn w-16 btn-warning" @click="logout()">Leave</button>
-                <button class="btn w-16 btn-success">Stay</button>
+                <button class="btn btn-secondary w-32" @click="logout()">
+                    <LogOut />
+                    <span>Leave</span>
+                </button>
+                <button class="btn btn-primary w-32">
+                    <ArrowBigDownDash />
+                    <span>Stay</span>
+                </button>
             </form>
         </div>
     </dialog>

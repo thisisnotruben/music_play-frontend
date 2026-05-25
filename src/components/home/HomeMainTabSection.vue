@@ -18,7 +18,7 @@ const sections = props.type === 'all'
 
 <template>
     <!-- HACK: h-192, need to find a way to expand until footer toolbar -->
-    <ul class="list overflow-auto h-192">
+    <ul class="list overflow-auto h-180">
         <template v-for="[title, entries] in sections">
             <template v-if="entries.length > 0">
 
