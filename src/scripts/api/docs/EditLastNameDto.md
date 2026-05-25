@@ -1,30 +1,22 @@
 
-# SongDto
+# EditLastNameDto
 
 
 ## Properties
 
 Name | Type
 ------------ | -------------
-`name` | string
-`genre` | string
-`length` | number
-`audioPath` | string
-`albumName` | string
+`lastName` | string
 
 ## Example
 
 ```typescript
-import type { SongDto } from ''
+import type { EditLastNameDto } from ''
 
 // TODO: Update the object below with actual values
 const example = {
-  "name": null,
-  "genre": null,
-  "length": null,
-  "audioPath": null,
-  "albumName": null,
-} satisfies SongDto
+  "lastName": null,
+} satisfies EditLastNameDto
 
 console.log(example)
 
@@ -33,7 +25,7 @@ const exampleJSON: string = JSON.stringify(example)
 console.log(exampleJSON)
 
 // Parse the JSON string back to an object
-const exampleParsed = JSON.parse(exampleJSON) as SongDto
+const exampleParsed = JSON.parse(exampleJSON) as EditLastNameDto
 console.log(exampleParsed)
 ```
 

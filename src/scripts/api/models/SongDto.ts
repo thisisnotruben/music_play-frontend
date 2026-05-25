@@ -30,12 +30,6 @@ export interface SongDto {
      * @type {string}
      * @memberof SongDto
      */
-    artistName?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof SongDto
-     */
     genre?: string;
     /**
      * 
@@ -54,7 +48,7 @@ export interface SongDto {
      * @type {string}
      * @memberof SongDto
      */
-    coverPath?: string;
+    albumName?: string;
 }
 
 /**
@@ -75,11 +69,10 @@ export function SongDtoFromJSONTyped(json: any, ignoreDiscriminator: boolean): S
     return {
         
         'name': json['name'] == null ? undefined : json['name'],
-        'artistName': json['artistName'] == null ? undefined : json['artistName'],
         'genre': json['genre'] == null ? undefined : json['genre'],
         'length': json['length'] == null ? undefined : json['length'],
         'audioPath': json['audioPath'] == null ? undefined : json['audioPath'],
-        'coverPath': json['coverPath'] == null ? undefined : json['coverPath'],
+        'albumName': json['albumName'] == null ? undefined : json['albumName'],
     };
 }
 
@@ -95,11 +88,10 @@ export function SongDtoToJSONTyped(value?: SongDto | null, ignoreDiscriminator: 
     return {
         
         'name': value['name'],
-        'artistName': value['artistName'],
         'genre': value['genre'],
         'length': value['length'],
         'audioPath': value['audioPath'],
-        'coverPath': value['coverPath'],
+        'albumName': value['albumName'],
     };
 }
 

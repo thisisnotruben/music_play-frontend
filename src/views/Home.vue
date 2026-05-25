@@ -1,19 +1,19 @@
 <script setup lang="ts">
-import HomeMain from '@/components/HomeMain.vue';
-import HomeNav from '@/components/HomeNav.vue';
-import PlayToolbar from '@/components/PlayToolbar.vue';
-import BaseLayout from '@/layouts/BaseLayout.vue';
-import { testSongSource } from '@/scripts/types';
+import HomeMain from '@/components/home/HomeMain.vue';
+import HomeNav from '@/components/home/HomeNav.vue';
+import ToolbarLayout from '@/layouts/ToolbarLayout.vue';
+import { Suspense } from 'vue';
 </script>
 
 <template>
-    <BaseLayout>
-        <div class="flex flex-col">
-            <div class="flex flex-1">
+    <ToolbarLayout>
+
+        <Suspense>
+            <template #default>
                 <HomeNav></HomeNav>
-                <HomeMain></HomeMain>
-            </div>
-            <PlayToolbar :song-source="testSongSource"></PlayToolbar>
-        </div>
-    </BaseLayout>
+            </template>
+        </Suspense>
+        <HomeMain></HomeMain>
+
+    </ToolbarLayout>
 </template>

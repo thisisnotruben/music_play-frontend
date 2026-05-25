@@ -4,12 +4,14 @@ All URIs are relative to *http://localhost:8080*
 
 | Method | HTTP request | Description |
 |------------- | ------------- | -------------|
-| [**addSongToPlaylist**](MusicPlayControllerApi.md#addsongtoplaylist) | **POST** /api/v1/addSongToPlaylist | Add song to a specific playlist |
+| [**addSongToPlaylist**](MusicPlayControllerApi.md#addsongtoplaylist) | **PUT** /api/v1/addSongToPlaylist | Add song to a specific playlist |
 | [**createPlaylist**](MusicPlayControllerApi.md#createplaylist) | **POST** /api/v1/createPlaylist | Create a playlist |
-| [**deletePlaylist**](MusicPlayControllerApi.md#deleteplaylist) | **POST** /api/v1/deletePlaylist | Delete a playlist |
+| [**deletePlaylist**](MusicPlayControllerApi.md#deleteplaylist) | **DELETE** /api/v1/deletePlaylist | Delete a playlist |
+| [**deleteSongFromPlaylist**](MusicPlayControllerApi.md#deletesongfromplaylist) | **DELETE** /api/v1/deleteSongFromPlaylist | Delete song from a specific playlist |
 | [**getAlbums**](MusicPlayControllerApi.md#getalbums) | **GET** /api/v1/getAlbums | Get all albums |
+| [**getAllMusic**](MusicPlayControllerApi.md#getallmusic) | **GET** /api/v1/getAllMusic | Get all music of library entire |
+| [**getExploreFeed**](MusicPlayControllerApi.md#getexplorefeed) | **GET** /api/v1/getExploreFeed | Get explore feed |
 | [**getPlaylists**](MusicPlayControllerApi.md#getplaylists) | **GET** /api/v1/getPlaylists | Get all playlists from user |
-| [**removeSongFromPlaylist**](MusicPlayControllerApi.md#removesongfromplaylist) | **POST** /api/v1/removeSongFromPlaylist | Removes song from a specific playlist |
 
 
 
@@ -70,14 +72,15 @@ No authorization required
 ### HTTP request headers
 
 - **Content-Type**: Not defined
-- **Accept**: Not defined
+- **Accept**: `application/json`, `*/*`
 
 
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-| **200** | Ok |  -  |
 | **404** | Song or Playlist not found |  -  |
+| **400** | Bad Request |  -  |
+| **200** | Ok |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
@@ -136,14 +139,15 @@ No authorization required
 ### HTTP request headers
 
 - **Content-Type**: Not defined
-- **Accept**: Not defined
+- **Accept**: `application/json`, `*/*`
 
 
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-| **200** | Ok |  -  |
 | **404** | User not found |  -  |
+| **400** | Bad Request |  -  |
+| **200** | Ok |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
@@ -202,21 +206,92 @@ No authorization required
 ### HTTP request headers
 
 - **Content-Type**: Not defined
-- **Accept**: Not defined
+- **Accept**: `application/json`, `*/*`
 
 
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-| **200** | Ok |  -  |
 | **404** | User or Playlist not found |  -  |
+| **400** | Bad Request |  -  |
+| **200** | Ok |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
+
+
+## deleteSongFromPlaylist
+
+> deleteSongFromPlaylist(songId, playlistId)
+
+Delete song from a specific playlist
+
+### Example
+
+```ts
+import {
+  Configuration,
+  MusicPlayControllerApi,
+} from '';
+import type { DeleteSongFromPlaylistRequest } from '';
+
+async function example() {
+  console.log("🚀 Testing  SDK...");
+  const api = new MusicPlayControllerApi();
+
+  const body = {
+    // number
+    songId: 56,
+    // number
+    playlistId: 56,
+  } satisfies DeleteSongFromPlaylistRequest;
+
+  try {
+    const data = await api.deleteSongFromPlaylist(body);
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// Run the test
+example().catch(console.error);
+```
+
+### Parameters
+
+
+| Name | Type | Description  | Notes |
+|------------- | ------------- | ------------- | -------------|
+| **songId** | `number` |  | [Defaults to `undefined`] |
+| **playlistId** | `number` |  | [Defaults to `undefined`] |
+
+### Return type
+
+`void` (Empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: `application/json`, `*/*`
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **404** | Song or Playlist not found |  -  |
+| **400** | Bad Request |  -  |
+| **200** | Ok |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
 
 ## getAlbums
 
-> AlbumListDto getAlbums()
+> Array&lt;AlbumDto&gt; getAlbums()
 
 Get all albums
 
@@ -251,7 +326,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-[**AlbumListDto**](AlbumListDto.md)
+[**Array&lt;AlbumDto&gt;**](AlbumDto.md)
 
 ### Authorization
 
@@ -260,12 +335,132 @@ No authorization required
 ### HTTP request headers
 
 - **Content-Type**: Not defined
-- **Accept**: `application/json`
+- **Accept**: `*/*`, `application/json`
 
 
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
+| **404** | Not Found |  -  |
+| **400** | Bad Request |  -  |
+| **200** | Ok |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
+
+
+## getAllMusic
+
+> Array&lt;AllMusicDto&gt; getAllMusic()
+
+Get all music of library entire
+
+### Example
+
+```ts
+import {
+  Configuration,
+  MusicPlayControllerApi,
+} from '';
+import type { GetAllMusicRequest } from '';
+
+async function example() {
+  console.log("🚀 Testing  SDK...");
+  const api = new MusicPlayControllerApi();
+
+  try {
+    const data = await api.getAllMusic();
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// Run the test
+example().catch(console.error);
+```
+
+### Parameters
+
+This endpoint does not need any parameter.
+
+### Return type
+
+[**Array&lt;AllMusicDto&gt;**](AllMusicDto.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: `*/*`, `application/json`
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **404** | Not Found |  -  |
+| **400** | Bad Request |  -  |
+| **200** | Ok |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
+
+
+## getExploreFeed
+
+> Array&lt;ExploreEntryDto&gt; getExploreFeed()
+
+Get explore feed
+
+### Example
+
+```ts
+import {
+  Configuration,
+  MusicPlayControllerApi,
+} from '';
+import type { GetExploreFeedRequest } from '';
+
+async function example() {
+  console.log("🚀 Testing  SDK...");
+  const api = new MusicPlayControllerApi();
+
+  try {
+    const data = await api.getExploreFeed();
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// Run the test
+example().catch(console.error);
+```
+
+### Parameters
+
+This endpoint does not need any parameter.
+
+### Return type
+
+[**Array&lt;ExploreEntryDto&gt;**](ExploreEntryDto.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: `application/json`, `*/*`
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **404** | User not found |  -  |
+| **400** | Bad Request |  -  |
 | **200** | Ok |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
@@ -273,7 +468,7 @@ No authorization required
 
 ## getPlaylists
 
-> PlaylistListDto getPlaylists()
+> Array&lt;PlaylistDto&gt; getPlaylists()
 
 Get all playlists from user
 
@@ -308,7 +503,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-[**PlaylistListDto**](PlaylistListDto.md)
+[**Array&lt;PlaylistDto&gt;**](PlaylistDto.md)
 
 ### Authorization
 
@@ -317,83 +512,15 @@ No authorization required
 ### HTTP request headers
 
 - **Content-Type**: Not defined
-- **Accept**: `application/json`
+- **Accept**: `application/json`, `*/*`
 
 
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-| **200** | Ok |  -  |
 | **404** | User not found |  -  |
-
-[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
-
-
-## removeSongFromPlaylist
-
-> removeSongFromPlaylist(songId, playlistId)
-
-Removes song from a specific playlist
-
-### Example
-
-```ts
-import {
-  Configuration,
-  MusicPlayControllerApi,
-} from '';
-import type { RemoveSongFromPlaylistRequest } from '';
-
-async function example() {
-  console.log("🚀 Testing  SDK...");
-  const api = new MusicPlayControllerApi();
-
-  const body = {
-    // number
-    songId: 56,
-    // number
-    playlistId: 56,
-  } satisfies RemoveSongFromPlaylistRequest;
-
-  try {
-    const data = await api.removeSongFromPlaylist(body);
-    console.log(data);
-  } catch (error) {
-    console.error(error);
-  }
-}
-
-// Run the test
-example().catch(console.error);
-```
-
-### Parameters
-
-
-| Name | Type | Description  | Notes |
-|------------- | ------------- | ------------- | -------------|
-| **songId** | `number` |  | [Defaults to `undefined`] |
-| **playlistId** | `number` |  | [Defaults to `undefined`] |
-
-### Return type
-
-`void` (Empty response body)
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
-- **Content-Type**: Not defined
-- **Accept**: Not defined
-
-
-### HTTP response details
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
+| **400** | Bad Request |  -  |
 | **200** | Ok |  -  |
-| **404** | Song or Playlist not found |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 

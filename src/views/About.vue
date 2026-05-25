@@ -1,16 +1,14 @@
 <script setup lang="ts">
-import BaseLayout from '@/layouts/BaseLayout.vue';
+import ToolbarLayout from '@/layouts/ToolbarLayout.vue';
 import { GitBranch } from '@lucide/vue';
 </script>
 
 <template>
-    <BaseLayout>
-        <div class="about-container">
-            <div class="bg-base-200 border-base-300s p-6">
-                <h2>
-                    <strong>About</strong>
-                </h2>
+    <ToolbarLayout>
+        <div class="flex justify-center items-center">
+            <div class="bg-base-200 text-base-content p-6">
 
+                <h2><strong>About</strong></h2>
                 <div class="divider "></div>
 
                 <p class="text-center p-8">
@@ -18,7 +16,7 @@ import { GitBranch } from '@lucide/vue';
                 </p>
 
                 <div class="flex justify-end">
-                    <button class="btn">
+                    <button class="btn btn-base">
                         <GitBranch />
                         Go to Repo
                     </button>
@@ -26,17 +24,5 @@ import { GitBranch } from '@lucide/vue';
 
             </div>
         </div>
-    </BaseLayout>
+    </ToolbarLayout>
 </template>
-
-<style scoped>
-.about-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.about-container>* {
-    width: 32rem;
-}
-</style>

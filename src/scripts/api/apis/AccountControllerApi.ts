@@ -19,17 +19,38 @@ import {
     AccountCreateDtoToJSON,
 } from '../models/AccountCreateDto';
 import {
-    type AccountEditDto,
-    AccountEditDtoFromJSON,
-    AccountEditDtoToJSON,
-} from '../models/AccountEditDto';
+    type ErrorResponseDto,
+    ErrorResponseDtoFromJSON,
+    ErrorResponseDtoToJSON,
+} from '../models/ErrorResponseDto';
+import {
+    type LoginResponseDto,
+    LoginResponseDtoFromJSON,
+    LoginResponseDtoToJSON,
+} from '../models/LoginResponseDto';
 
 export interface CreateAccountRequest {
     accountCreateDto: AccountCreateDto;
 }
 
-export interface EditAccountRequest {
-    accountEditDto: AccountEditDto;
+export interface EditEmailRequest {
+    email: string;
+}
+
+export interface EditFirstNameRequest {
+    firstName: string;
+}
+
+export interface EditLastNameRequest {
+    lastName: string;
+}
+
+export interface EditPasswordRequest {
+    password: string;
+}
+
+export interface EditUsernameRequest {
+    username: string;
 }
 
 export interface LoginRequest {
@@ -89,49 +110,238 @@ export class AccountControllerApi extends runtime.BaseAPI {
     }
 
     /**
-     * Creates request options for editAccount without sending the request
+     * Creates request options for editEmail without sending the request
      */
-    async editAccountRequestOpts(requestParameters: EditAccountRequest): Promise<runtime.RequestOpts> {
-        if (requestParameters['accountEditDto'] == null) {
+    async editEmailRequestOpts(requestParameters: EditEmailRequest): Promise<runtime.RequestOpts> {
+        if (requestParameters['email'] == null) {
             throw new runtime.RequiredError(
-                'accountEditDto',
-                'Required parameter "accountEditDto" was null or undefined when calling editAccount().'
+                'email',
+                'Required parameter "email" was null or undefined when calling editEmail().'
             );
         }
 
         const queryParameters: any = {};
 
+        if (requestParameters['email'] != null) {
+            queryParameters['email'] = requestParameters['email'];
+        }
+
         const headerParameters: runtime.HTTPHeaders = {};
 
-        headerParameters['Content-Type'] = 'application/json';
 
-
-        let urlPath = `/api/v1/account/edit`;
+        let urlPath = `/api/v1/account/edit/email`;
 
         return {
             path: urlPath,
-            method: 'POST',
+            method: 'PATCH',
             headers: headerParameters,
             query: queryParameters,
-            body: AccountEditDtoToJSON(requestParameters['accountEditDto']),
         };
     }
 
     /**
-     * Edits an existing account
+     * Edit e-mail
      */
-    async editAccountRaw(requestParameters: EditAccountRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        const requestOptions = await this.editAccountRequestOpts(requestParameters);
+    async editEmailRaw(requestParameters: EditEmailRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const requestOptions = await this.editEmailRequestOpts(requestParameters);
         const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.VoidApiResponse(response);
     }
 
     /**
-     * Edits an existing account
+     * Edit e-mail
      */
-    async editAccount(requestParameters: EditAccountRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.editAccountRaw(requestParameters, initOverrides);
+    async editEmail(requestParameters: EditEmailRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.editEmailRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * Creates request options for editFirstName without sending the request
+     */
+    async editFirstNameRequestOpts(requestParameters: EditFirstNameRequest): Promise<runtime.RequestOpts> {
+        if (requestParameters['firstName'] == null) {
+            throw new runtime.RequiredError(
+                'firstName',
+                'Required parameter "firstName" was null or undefined when calling editFirstName().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        if (requestParameters['firstName'] != null) {
+            queryParameters['firstName'] = requestParameters['firstName'];
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+
+        let urlPath = `/api/v1/account/edit/firstName`;
+
+        return {
+            path: urlPath,
+            method: 'PATCH',
+            headers: headerParameters,
+            query: queryParameters,
+        };
+    }
+
+    /**
+     * Edit first name
+     */
+    async editFirstNameRaw(requestParameters: EditFirstNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const requestOptions = await this.editFirstNameRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Edit first name
+     */
+    async editFirstName(requestParameters: EditFirstNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.editFirstNameRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * Creates request options for editLastName without sending the request
+     */
+    async editLastNameRequestOpts(requestParameters: EditLastNameRequest): Promise<runtime.RequestOpts> {
+        if (requestParameters['lastName'] == null) {
+            throw new runtime.RequiredError(
+                'lastName',
+                'Required parameter "lastName" was null or undefined when calling editLastName().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        if (requestParameters['lastName'] != null) {
+            queryParameters['lastName'] = requestParameters['lastName'];
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+
+        let urlPath = `/api/v1/account/edit/lastName`;
+
+        return {
+            path: urlPath,
+            method: 'PATCH',
+            headers: headerParameters,
+            query: queryParameters,
+        };
+    }
+
+    /**
+     * Edit last name
+     */
+    async editLastNameRaw(requestParameters: EditLastNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const requestOptions = await this.editLastNameRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Edit last name
+     */
+    async editLastName(requestParameters: EditLastNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.editLastNameRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * Creates request options for editPassword without sending the request
+     */
+    async editPasswordRequestOpts(requestParameters: EditPasswordRequest): Promise<runtime.RequestOpts> {
+        if (requestParameters['password'] == null) {
+            throw new runtime.RequiredError(
+                'password',
+                'Required parameter "password" was null or undefined when calling editPassword().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        if (requestParameters['password'] != null) {
+            queryParameters['password'] = requestParameters['password'];
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+
+        let urlPath = `/api/v1/account/edit/password`;
+
+        return {
+            path: urlPath,
+            method: 'PATCH',
+            headers: headerParameters,
+            query: queryParameters,
+        };
+    }
+
+    /**
+     * Edit password
+     */
+    async editPasswordRaw(requestParameters: EditPasswordRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const requestOptions = await this.editPasswordRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Edit password
+     */
+    async editPassword(requestParameters: EditPasswordRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.editPasswordRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * Creates request options for editUsername without sending the request
+     */
+    async editUsernameRequestOpts(requestParameters: EditUsernameRequest): Promise<runtime.RequestOpts> {
+        if (requestParameters['username'] == null) {
+            throw new runtime.RequiredError(
+                'username',
+                'Required parameter "username" was null or undefined when calling editUsername().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        if (requestParameters['username'] != null) {
+            queryParameters['username'] = requestParameters['username'];
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+
+        let urlPath = `/api/v1/account/edit/username`;
+
+        return {
+            path: urlPath,
+            method: 'PATCH',
+            headers: headerParameters,
+            query: queryParameters,
+        };
+    }
+
+    /**
+     * Edit username
+     */
+    async editUsernameRaw(requestParameters: EditUsernameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const requestOptions = await this.editUsernameRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Edit username
+     */
+    async editUsername(requestParameters: EditUsernameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.editUsernameRaw(requestParameters, initOverrides);
     }
 
     /**
@@ -178,18 +388,19 @@ export class AccountControllerApi extends runtime.BaseAPI {
     /**
      * Login to an account
      */
-    async loginRaw(requestParameters: LoginRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async loginRaw(requestParameters: LoginRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<LoginResponseDto>> {
         const requestOptions = await this.loginRequestOpts(requestParameters);
         const response = await this.request(requestOptions, initOverrides);
 
-        return new runtime.VoidApiResponse(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => LoginResponseDtoFromJSON(jsonValue));
     }
 
     /**
      * Login to an account
      */
-    async login(requestParameters: LoginRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.loginRaw(requestParameters, initOverrides);
+    async login(requestParameters: LoginRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LoginResponseDto> {
+        const response = await this.loginRaw(requestParameters, initOverrides);
+        return await response.value();
     }
 
 }

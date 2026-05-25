@@ -7,9 +7,10 @@ const props = defineProps<{
 </script>
 
 <template>
-    <footer class="footer footer-horizontal gap-2 p-4">{{ new Date().getFullYear() }} —
-        <AudioWaveform />
-        {{ appName }}
+    <footer class="footer-horizontal gap-2 p-4 text-sm bg-neutral text-neutral-content">
+        <span>{{ new Date().getFullYear() }} —</span>
+        <AudioWaveform class="w-4" />
+        <span>{{ appName }}</span>
     </footer>
 </template>
 
@@ -17,5 +18,6 @@ const props = defineProps<{
 footer {
     display: flex;
     justify-content: right;
+    align-items: center;
 }
 </style>

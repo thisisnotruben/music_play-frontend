@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import AccountDialogEntry from '@/components/AccountDialogEntry.vue';
-import BaseLayout from '@/layouts/BaseLayout.vue';
+import AccountDialogEntry from '@/components/account/AccountDialogEntry.vue';
+import ToolbarLayout from '@/layouts/ToolbarLayout.vue';
 import { Eye, EyeClosed, KeyRound, Mail, Pencil, User } from '@lucide/vue';
 
 const props = withDefaults(defineProps<{
@@ -19,24 +19,24 @@ const props = withDefaults(defineProps<{
 </script>
 
 <template>
-    <BaseLayout>
+    <ToolbarLayout>
         <div class="account-container">
 
-            <div class="bg-base-200 border-base-300 p-6">
+            <div class="bg-base-200 text-base-content p-6">
                 <h2>
                     <strong>
                         Account Information
                     </strong>
                 </h2>
 
-                <div class="divider "></div>
+                <div class="divider"></div>
 
                 <p class="text-center">
                     View and/or edit your account.
                 </p>
             </div>
 
-            <div class="bg-base-200 border-base-300 p-6">
+            <div class="bg-base-200 text-base-content p-6">
                 <AccountDialogEntry id="username_edit" header="Username" body-key="Current Username"
                     :body-value="username" input-placeholder="New Username" type="username"
                     validator-hint="Must be >= 4 characters and <= 24 characters.">
@@ -65,7 +65,7 @@ const props = withDefaults(defineProps<{
                         Username:
                     </span>
                     <span>{{ username }}</span>
-                    <button class="btn btn-neutral" onclick="username_edit.showModal()">
+                    <button class="btn btn-base" onclick="username_edit.showModal()">
                         <Pencil />
                         Edit
                     </button>
@@ -87,7 +87,7 @@ const props = withDefaults(defineProps<{
                             </span>
                         </label>
                     </span>
-                    <button class="btn btn-neutral" onclick="password_edit.showModal()">
+                    <button class="btn btn-base" onclick="password_edit.showModal()">
                         <Pencil />
                         Edit
                     </button>
@@ -97,14 +97,14 @@ const props = withDefaults(defineProps<{
                         Email:
                     </span>
                     <span>{{ email }}</span>
-                    <button class="btn btn-neutral" onclick="email_edit.showModal()">
+                    <button class="btn btn-base" onclick="email_edit.showModal()">
                         <Pencil />
                         Edit
                     </button>
                 </div>
             </div>
 
-            <div class="bg-base-200 border-base-300 p-6">
+            <div class="bg-base-200 text-base-content p-6">
                 <AccountDialogEntry id="firstName_edit" header="First Name" body-key="Current First Name"
                     :body-value="firstName" input-placeholder="Edit First Name" type="firstName"
                     validator-hint="Cannot be blank.">
@@ -127,14 +127,14 @@ const props = withDefaults(defineProps<{
 
                     <span class="field-label">First Name:</span>
                     <span>{{ firstName }}</span>
-                    <button class="btn btn-neutral" onclick="firstName_edit.showModal()">
+                    <button class="btn btn-base" onclick="firstName_edit.showModal()">
                         <Pencil />
                         Edit
                     </button>
 
                     <span class="field-label">Last Name:</span>
                     <span>{{ lastName }}</span>
-                    <button class="btn btn-neutral" onclick="lastName_edit.showModal()">
+                    <button class="btn btn-base" onclick="lastName_edit.showModal()">
                         <Pencil />
                         Edit
                     </button>
@@ -142,7 +142,7 @@ const props = withDefaults(defineProps<{
             </div>
 
         </div>
-    </BaseLayout>
+    </ToolbarLayout>
 </template>
 
 <style scoped>

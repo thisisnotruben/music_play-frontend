@@ -8,7 +8,7 @@ const appName = 'Music Play';
 <template>
     <div class="main-container flex flex-col">
         <Header :app-name="appName"></Header>
-        <main class="flex-1">
+        <main class="grow">
             <slot></slot>
         </main>
         <Footer :app-name="appName"></Footer>

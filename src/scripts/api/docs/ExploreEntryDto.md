@@ -1,30 +1,24 @@
 
-# SongDto
+# ExploreEntryDto
 
 
 ## Properties
 
 Name | Type
 ------------ | -------------
-`name` | string
-`genre` | string
-`length` | number
-`audioPath` | string
-`albumName` | string
+`label` | string
+`feed` | [Array&lt;PlaylistDto&gt;](PlaylistDto.md)
 
 ## Example
 
 ```typescript
-import type { SongDto } from ''
+import type { ExploreEntryDto } from ''
 
 // TODO: Update the object below with actual values
 const example = {
-  "name": null,
-  "genre": null,
-  "length": null,
-  "audioPath": null,
-  "albumName": null,
-} satisfies SongDto
+  "label": null,
+  "feed": null,
+} satisfies ExploreEntryDto
 
 console.log(example)
 
@@ -33,7 +27,7 @@ const exampleJSON: string = JSON.stringify(example)
 console.log(exampleJSON)
 
 // Parse the JSON string back to an object
-const exampleParsed = JSON.parse(exampleJSON) as SongDto
+const exampleParsed = JSON.parse(exampleJSON) as ExploreEntryDto
 console.log(exampleParsed)
 ```
 

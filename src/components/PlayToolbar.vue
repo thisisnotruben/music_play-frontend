@@ -1,84 +1,65 @@
 <script setup lang="ts">
-import { LoopType, player, type SongSource } from '@/scripts/types';
+import { formatPlaybackTime } from '@/scripts/helper';
+import { playerService } from '@/scripts/service';
+import { LoopType } from '@/scripts/shared';
 import { Pause, Play, Repeat, Repeat1, RepeatOff, Shuffle, SkipBack, SkipForward, Volume, Volume1, Volume2, VolumeX } from '@lucide/vue';
 import { ref, watch } from 'vue';
-
-const props = defineProps<{
-    songSource: SongSource
-}>();
-
-const shuffle = ref(false);
 
 const togglePlay = ref(false);
 watch(togglePlay, () => {
     if (togglePlay.value) {
-        player.resume();
+        playerService.resume();
     } else {
-        player.pause();
+        playerService.pause();
     }
 });
 
-const loopTypes = [LoopType.ALL, LoopType.SINGULAR, LoopType.OFF];
-const loopType = ref(LoopType.OFF);
-function setloopType() {
-    loopType.value = loopTypes.at((loopTypes.indexOf(loopType?.value ?? LoopType.OFF) + 1) % loopTypes.length) as number;
-}
-
 const volume = ref(100);
 watch(volume, () => {
-    player.setVolume(volume.value);
+    playerService.setVolume(volume.value);
 });
-
-function formatPlaybackTime(seconds: number): string {
-    return Math.floor(seconds / 60).toString().padStart(2, '0')
-        .concat(':')
-        .concat((seconds % 60).toString().padStart(2, '0'));
-}
-
 </script>
 
 <template>
-    <div class="navbar h-32">
+    <div class="navbar h-32 bg-base-300">
 
         <div class="navbar-start flex items-center gap-2">
-            <img class="h-16 ml-4" :src="songSource.getCurrentSong().coverPath" />
+            <img class="h-16 ml-4" :src="playerService.getCover()" />
             <div class="flex flex-col">
-                <strong>{{ player.getSong()?.name ?? '' }}</strong>
-                <span>{{ player.getSong()?.artistName ?? '' }}</span>
+                <strong>{{ playerService.getSong()?.name ?? '' }}</strong>
+                <span>{{ playerService.getSong()?.albumName ?? '' }}</span>
             </div>
         </div>
 
         <div class="navbar-center flex flex-col gap-2">
-            <div class="flex gap-2">
-                <button class="btn btn-circle" @click="shuffle = !shuffle">
+            <div class="flex gap-2 items-center">
+                <button class="btn btn-circle btn-neutral" @click="playerService.toggleShuffle()">
                     <Shuffle />
                 </button>
-                <button class="btn btn-circle"
-                    @click="player.playSong(songSource.getPrevSong(loopType as Number, shuffle))">
-                    <SkipBack />
+                <button class="btn btn-circle btn-neutral" @click="playerService.playPrev()">
+                    <SkipBack class="" />
                 </button>
-                <button class="btn btn-circle" @click="togglePlay = !togglePlay">
+                <button class="btn btn-circle btn-xl btn-primary" @click="togglePlay = !togglePlay">
                     <label class="swap">
                         <input type="checkbox" />
                         <Pause class="swap-on" />
                         <Play class="swap-off" />
                     </label>
                 </button>
-                <button class="btn btn-circle"
-                    @click="player.playSong(songSource.getNextSong(loopType as Number, shuffle))">
+                <button class="btn btn-circle btn-neutral" @click="playerService.playNext()">
                     <SkipForward />
                 </button>
-                <button class="btn btn-circle" @click="setloopType()">
-                    <RepeatOff v-show="loopType == LoopType.OFF" />
-                    <Repeat v-show="loopType == LoopType.ALL" />
-                    <Repeat1 v-show="loopType == LoopType.SINGULAR" />
+                <button class="btn btn-circle btn-neutral" @click="playerService.setLoopType()">
+                    <RepeatOff v-show="playerService.getLoopType() == LoopType.OFF" />
+                    <Repeat v-show="playerService.getLoopType() == LoopType.ALL" />
+                    <Repeat1 v-show="playerService.getLoopType() == LoopType.SINGULAR" />
                 </button>
             </div>
 
-            <div class="flex items-center gap-2">
-                <span>{{ formatPlaybackTime(player.getCurrentSeek()) }}</span>
+            <div class="flex items-center gap-2 text-base-content">
+                <span>{{ formatPlaybackTime(playerService.getCurrentSeek()) }}</span>
                 <progress class="progress w-96" value="0" max="100"></progress>
-                <span>{{ formatPlaybackTime(player.getSong()?.length ?? 0) }}</span>
+                <span>{{ formatPlaybackTime(playerService.getSong()?.length ?? 0) }}</span>
             </div>
         </div>
 
@@ -93,5 +74,3 @@ function formatPlaybackTime(seconds: number): string {
 
     </div>
 </template>
-
-<style scoped></style>
