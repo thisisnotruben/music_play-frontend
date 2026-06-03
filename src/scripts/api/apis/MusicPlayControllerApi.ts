@@ -175,18 +175,19 @@ export class MusicPlayControllerApi extends runtime.BaseAPI {
     /**
      * Create a playlist
      */
-    async createPlaylistRaw(requestParameters: CreatePlaylistRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async createPlaylistRaw(requestParameters: CreatePlaylistRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PlaylistDto>> {
         const requestOptions = await this.createPlaylistRequestOpts(requestParameters);
         const response = await this.request(requestOptions, initOverrides);
 
-        return new runtime.VoidApiResponse(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => PlaylistDtoFromJSON(jsonValue));
     }
 
     /**
      * Create a playlist
      */
-    async createPlaylist(requestParameters: CreatePlaylistRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.createPlaylistRaw(requestParameters, initOverrides);
+    async createPlaylist(requestParameters: CreatePlaylistRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PlaylistDto> {
+        const response = await this.createPlaylistRaw(requestParameters, initOverrides);
+        return await response.value();
     }
 
     /**

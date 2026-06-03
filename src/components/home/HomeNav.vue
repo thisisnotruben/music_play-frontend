@@ -10,7 +10,7 @@ const emit = defineEmits({
     entrySelected(entry: SongContainer) { },
 });
 
-const playlists = await musicPlayService.getPlaylists();
+const playlists = ref(await musicPlayService.getPlaylists());
 
 const formId = 'home-nav-dialog-form';
 const formInputFileId = formId.concat('-file-input');
@@ -36,13 +36,13 @@ function onFileSelected(e: Event) {
     }
 }
 
-function createPlaylist() {
+async function createPlaylist() {
     let request: CreatePlaylistRequest = { playlistName: enteredPlaylistName.value }
     if (enteringCoverImg.value) {
         request.file = enteredCoverImg.value.pathData;
     }
-    musicPlayService.createPlaylist(request);
 
+    playlists.value.push(await musicPlayService.createPlaylist(request));
     // TODO: add validations here then close
     eval("document.querySelector('#home_nav_dialog').close();");
 }

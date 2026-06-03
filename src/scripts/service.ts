@@ -12,8 +12,12 @@ class MusicPlayService {
 
     constructor(private api = new MusicPlayControllerApi(config)) { }
 
-    createPlaylist(requestParameters: CreatePlaylistRequest) {
-        this.api.createPlaylist(requestParameters);
+    async createPlaylist(requestParameters: CreatePlaylistRequest): Promise<SongContainer> {
+        const createdPlaylist = await this.api.createPlaylist(requestParameters);
+        return new SongContainer(
+            createdPlaylist,
+            this.#getFullPath(createdPlaylist.coverPath ?? '', apiUserStorageUrl),
+            SongContainerTypes.PLAYLIST);
     }
 
     deletePlaylist(requestParameters: DeletePlaylistRequest) {

@@ -72,22 +72,22 @@ No authorization required
 ### HTTP request headers
 
 - **Content-Type**: Not defined
-- **Accept**: `application/json`, `*/*`
+- **Accept**: `*/*`
 
 
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-| **404** | Song or Playlist not found |  -  |
+| **404** | Not Found |  -  |
 | **400** | Bad Request |  -  |
-| **200** | Ok |  -  |
+| **200** | OK |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
 
 ## createPlaylist
 
-> createPlaylist(playlistName, file)
+> PlaylistDto createPlaylist(playlistName, file)
 
 Create a playlist
 
@@ -133,7 +133,7 @@ example().catch(console.error);
 
 ### Return type
 
-`void` (Empty response body)
+[**PlaylistDto**](PlaylistDto.md)
 
 ### Authorization
 
@@ -142,15 +142,15 @@ No authorization required
 ### HTTP request headers
 
 - **Content-Type**: `multipart/form-data`
-- **Accept**: `application/json`, `*/*`
+- **Accept**: `*/*`, `application/json`
 
 
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-| **404** | User not found |  -  |
+| **404** | Not Found |  -  |
 | **400** | Bad Request |  -  |
-| **200** | Ok |  -  |
+| **200** | OK |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
@@ -209,15 +209,15 @@ No authorization required
 ### HTTP request headers
 
 - **Content-Type**: Not defined
-- **Accept**: `application/json`, `*/*`
+- **Accept**: `*/*`
 
 
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-| **404** | User or Playlist not found |  -  |
+| **404** | Not Found |  -  |
 | **400** | Bad Request |  -  |
-| **200** | Ok |  -  |
+| **200** | OK |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
@@ -279,15 +279,15 @@ No authorization required
 ### HTTP request headers
 
 - **Content-Type**: Not defined
-- **Accept**: `application/json`, `*/*`
+- **Accept**: `*/*`
 
 
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-| **404** | Song or Playlist not found |  -  |
+| **404** | Not Found |  -  |
 | **400** | Bad Request |  -  |
-| **200** | Ok |  -  |
+| **200** | OK |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
@@ -338,7 +338,7 @@ No authorization required
 ### HTTP request headers
 
 - **Content-Type**: Not defined
-- **Accept**: `*/*`, `application/json`
+- **Accept**: `*/*`
 
 
 ### HTTP response details
@@ -346,7 +346,7 @@ No authorization required
 |-------------|-------------|------------------|
 | **404** | Not Found |  -  |
 | **400** | Bad Request |  -  |
-| **200** | Ok |  -  |
+| **200** | OK |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
@@ -397,7 +397,7 @@ No authorization required
 ### HTTP request headers
 
 - **Content-Type**: Not defined
-- **Accept**: `*/*`, `application/json`
+- **Accept**: `*/*`
 
 
 ### HTTP response details
@@ -405,7 +405,7 @@ No authorization required
 |-------------|-------------|------------------|
 | **404** | Not Found |  -  |
 | **400** | Bad Request |  -  |
-| **200** | Ok |  -  |
+| **200** | OK |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
@@ -456,15 +456,15 @@ No authorization required
 ### HTTP request headers
 
 - **Content-Type**: Not defined
-- **Accept**: `application/json`, `*/*`
+- **Accept**: `*/*`
 
 
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-| **404** | User not found |  -  |
+| **404** | Not Found |  -  |
 | **400** | Bad Request |  -  |
-| **200** | Ok |  -  |
+| **200** | OK |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
@@ -515,15 +515,15 @@ No authorization required
 ### HTTP request headers
 
 - **Content-Type**: Not defined
-- **Accept**: `application/json`, `*/*`
+- **Accept**: `*/*`
 
 
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-| **404** | User not found |  -  |
+| **404** | Not Found |  -  |
 | **400** | Bad Request |  -  |
-| **200** | Ok |  -  |
+| **200** | OK |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
