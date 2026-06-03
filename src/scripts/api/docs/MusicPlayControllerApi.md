@@ -87,7 +87,7 @@ No authorization required
 
 ## createPlaylist
 
-> createPlaylist(playlistName)
+> createPlaylist(playlistName, file)
 
 Create a playlist
 
@@ -107,6 +107,8 @@ async function example() {
   const body = {
     // string
     playlistName: playlistName_example,
+    // Blob (optional)
+    file: BINARY_DATA_HERE,
   } satisfies CreatePlaylistRequest;
 
   try {
@@ -127,6 +129,7 @@ example().catch(console.error);
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
 | **playlistName** | `string` |  | [Defaults to `undefined`] |
+| **file** | `Blob` |  | [Optional] [Defaults to `undefined`] |
 
 ### Return type
 
@@ -138,7 +141,7 @@ No authorization required
 
 ### HTTP request headers
 
-- **Content-Type**: Not defined
+- **Content-Type**: `multipart/form-data`
 - **Accept**: `application/json`, `*/*`
 
 

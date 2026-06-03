@@ -45,7 +45,9 @@ const confirmTextView = ref(false);
     <dialog :id="id" class="modal">
         <div class="modal-box bg-base-300 text-base-content">
 
-            <h4><strong>{{ header }}</strong></h4>
+            <h4 class="text-lg">
+                <strong>{{ header }}</strong>
+            </h4>
             <div class="divider "></div>
 
             <div class="dialog-key-value">

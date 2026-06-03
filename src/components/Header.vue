@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ArrowBigDownDash, AudioWaveform, House, Info, Keyboard, LogOut, Search, SquareUser, User } from '@lucide/vue';
+import { ArrowBigDownDash, AudioWaveform, House, Info, Keyboard, LogOut, Search, SquareUser, User, X } from '@lucide/vue';
 import { useKeyModifier, useMagicKeys } from '@vueuse/core';
 import { ref, watchEffect } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
@@ -101,11 +101,29 @@ document.onkeydown = function (e: KeyboardEvent) {
     </header>
 
     <dialog id="search_model" class="modal" :class="{ 'modal-open': showPopupSearch }">
-        <div class="modal-box w-192 bg-base-300 text-base-content">
+        <div class="modal-box w-192 bg-base-300 text-base-content flex flex-col gap-2">
+
             <label class="input w-full">
                 <Search />
                 <input type="text" placeholder="What do you want to play?" />
             </label>
+
+            <form class="flex justify-between">
+                <div class="flex gap-1">
+                    <input class="btn btn-base" type="checkbox" name="frameworks" aria-label="All" />
+                    <input class="btn btn-base" type="checkbox" name="frameworks" aria-label="Artist" />
+                    <input class="btn btn-base" type="checkbox" name="frameworks" aria-label="Album" />
+                    <input class="btn btn-base" type="checkbox" name="frameworks" aria-label="Song" />
+                </div>
+                <button class="btn btn-base" type="reset">
+                    <X />
+                </button>
+            </form>
+
+            <ul class="list">
+                <li></li>
+            </ul>
+
         </div>
         <form method="dialog" class="modal-backdrop">
 

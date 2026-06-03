@@ -1,13 +1,17 @@
 <script setup lang="ts">
-import { BLANK_SONG_CONTAINER, SongContainer } from '@/scripts/shared';
+import { SongContainer } from '@/scripts/shared';
 import { Folder, FolderOpen, Telescope } from '@lucide/vue';
-import { ref, Suspense } from 'vue';
+import { ref, Suspense, watch } from 'vue';
 import HomeMainTabSection from './HomeMainTabSection.vue';
 import HomeMainTabSectionSkeleton from './HomeMainTabSectionSkeleton.vue';
 import SongList from './SongList.vue';
 
+const props = defineProps<{
+    songContainer: SongContainer
+}>();
+
 const entryFocusedLabel = ref('');
-const entry = ref(BLANK_SONG_CONTAINER);
+const entry = ref(props.songContainer);
 const entryFocused = ref(false);
 const goToEntryFocusTab = ref(false);
 function setEntry(songContainer: SongContainer) {
@@ -18,6 +22,8 @@ function setEntry(songContainer: SongContainer) {
     entryFocused.value = isFocused;
     goToEntryFocusTab.value = isFocused;
 }
+
+watch(props, (p) => setEntry(p.songContainer))
 </script>
 
 <template>

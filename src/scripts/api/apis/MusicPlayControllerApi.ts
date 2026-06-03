@@ -46,6 +46,7 @@ export interface AddSongToPlaylistRequest {
 
 export interface CreatePlaylistRequest {
     playlistName: string;
+    file?: Blob;
 }
 
 export interface DeletePlaylistRequest {
@@ -139,6 +140,26 @@ export class MusicPlayControllerApi extends runtime.BaseAPI {
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+        const consumes: runtime.Consume[] = [
+            { contentType: 'multipart/form-data' },
+        ];
+        // @ts-ignore: canConsumeForm may be unused
+        const canConsumeForm = runtime.canConsumeForm(consumes);
+
+        let formParams: { append(param: string, value: any): any };
+        let useForm = false;
+        // use FormData to transmit files using content-type "multipart/form-data"
+        useForm = canConsumeForm;
+        if (useForm) {
+            formParams = new FormData();
+        } else {
+            formParams = new URLSearchParams();
+        }
+
+        if (requestParameters['file'] != null) {
+            formParams.append('file', requestParameters['file'] as any);
+        }
+
 
         let urlPath = `/api/v1/createPlaylist`;
 
@@ -147,6 +168,7 @@ export class MusicPlayControllerApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
+            body: formParams,
         };
     }
 

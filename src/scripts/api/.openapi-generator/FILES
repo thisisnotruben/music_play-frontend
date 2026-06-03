@@ -1,5 +1,6 @@
 apis/AccountControllerApi.ts
 apis/MusicPlayControllerApi.ts
+apis/SearchControllerApi.ts
 apis/index.ts
 docs/AccountControllerApi.md
 docs/AccountCreateDto.md
@@ -10,6 +11,8 @@ docs/ExploreEntryDto.md
 docs/LoginResponseDto.md
 docs/MusicPlayControllerApi.md
 docs/PlaylistDto.md
+docs/SearchControllerApi.md
+docs/SearchResponseDto.md
 docs/SongDto.md
 index.ts
 models/AccountCreateDto.ts
@@ -19,6 +22,7 @@ models/ErrorResponseDto.ts
 models/ExploreEntryDto.ts
 models/LoginResponseDto.ts
 models/PlaylistDto.ts
+models/SearchResponseDto.ts
 models/SongDto.ts
 models/index.ts
 runtime.ts

@@ -2,3 +2,4 @@
 /* eslint-disable */
 export * from './AccountControllerApi';
 export * from './MusicPlayControllerApi';
+export * from './SearchControllerApi';

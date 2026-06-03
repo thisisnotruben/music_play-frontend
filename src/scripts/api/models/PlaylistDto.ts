@@ -35,6 +35,12 @@ export interface PlaylistDto {
     name?: string;
     /**
      * 
+     * @type {string}
+     * @memberof PlaylistDto
+     */
+    coverPath?: string;
+    /**
+     * 
      * @type {Array<SongDto>}
      * @memberof PlaylistDto
      */
@@ -59,6 +65,7 @@ export function PlaylistDtoFromJSONTyped(json: any, ignoreDiscriminator: boolean
     return {
         
         'name': json['name'] == null ? undefined : json['name'],
+        'coverPath': json['coverPath'] == null ? undefined : json['coverPath'],
         'songs': json['songs'] == null ? undefined : ((json['songs'] as Array<any>).map(SongDtoFromJSON)),
     };
 }
@@ -75,6 +82,7 @@ export function PlaylistDtoToJSONTyped(value?: PlaylistDto | null, ignoreDiscrim
     return {
         
         'name': value['name'],
+        'coverPath': value['coverPath'],
         'songs': value['songs'] == null ? undefined : ((value['songs'] as Array<any>).map(SongDtoToJSON)),
     };
 }
