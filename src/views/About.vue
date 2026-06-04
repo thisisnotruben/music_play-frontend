@@ -16,10 +16,11 @@ import { GitBranch } from '@lucide/vue';
                 </p>
 
                 <div class="flex justify-end">
-                    <button class="btn btn-base">
+                    <a class="btn btn-base" href="https://github.com/thisisnotruben/music_play-frontend"
+                        target="_blank">
                         <GitBranch />
                         Go to Repo
-                    </button>
+                    </a>
                 </div>
 
             </div>

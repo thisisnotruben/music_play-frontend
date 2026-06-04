@@ -49,6 +49,12 @@ async function createPlaylist() {
     playlists.value.push(await musicPlayService.createPlaylist(request));
     // TODO: add validations here then close
     eval("document.querySelector('#home_nav_dialog').close();");
+    cleanUp();
+}
+
+function cleanUp() {
+    enteredPlaylistName.value = '';
+    enteringCoverImg.value = false;
 }
 
 function deletePlaylist(songContainer: SongContainer) {
@@ -118,7 +124,7 @@ watch(props, (value) => deletePlaylist(value.playlistToDelete));
                     <Save />
                     Create
                 </button>
-                <button class="btn btn-base">
+                <button class="btn btn-base" @click="cleanUp()">
                     <CircleX />
                     Cancel
                 </button>
