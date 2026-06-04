@@ -1,17 +1,17 @@
 <script setup lang="ts">
-import { SongContainer } from '@/scripts/shared';
+import { BLANK_SONG_CONTAINER, SongContainer } from '@/scripts/shared';
 import { Folder, FolderOpen, Telescope } from '@lucide/vue';
-import { ref, Suspense, watch } from 'vue';
+import { ref, Suspense, useTemplateRef, watch } from 'vue';
 import HomeMainTabSection from './HomeMainTabSection.vue';
 import HomeMainTabSectionSkeleton from './HomeMainTabSectionSkeleton.vue';
 import SongList from './SongList.vue';
 
-const props = defineProps<{
-    songContainer: SongContainer
-}>();
+const emit = defineEmits({
+    onPlaylistDeleted(p: SongContainer) { },
+});
 
 const entryFocusedLabel = ref('');
-const entry = ref(props.songContainer);
+const entry = ref(BLANK_SONG_CONTAINER);
 const entryFocused = ref(false);
 const goToEntryFocusTab = ref(false);
 function setEntry(songContainer: SongContainer) {
@@ -23,7 +23,16 @@ function setEntry(songContainer: SongContainer) {
     goToEntryFocusTab.value = isFocused;
 }
 
-watch(props, (p) => setEntry(p.songContainer))
+const exploreTab = useTemplateRef('explore-tab');
+function onPlaylistDeletedReceived(p: SongContainer) {
+    setEntry(BLANK_SONG_CONTAINER);
+    if (exploreTab.value) {
+        exploreTab.value.checked = true;
+    }
+    emit('onPlaylistDeleted', p);
+}
+
+defineExpose({ setEntry })
 </script>
 
 <template>
@@ -31,7 +40,7 @@ watch(props, (p) => setEntry(p.songContainer))
         <section class="tabs tabs-box pt-2">
 
             <label class="tab gap-2 ">
-                <input type="radio" name="my_tabs_2" checked @click="goToEntryFocusTab = false" />
+                <input type="radio" name="my_tabs_2" checked @click="goToEntryFocusTab = false" ref="explore-tab" />
                 <Telescope />
                 <span>Explore</span>
             </label>
@@ -70,7 +79,9 @@ watch(props, (p) => setEntry(p.songContainer))
                 <span>{{ entryFocusedLabel }}</span>
             </label>
             <div class="tab-content">
-                <SongList class="h-192" :song-container="entry"></SongList>
+                <SongList class="h-192" :song-container="entry"
+                    @on-playlist-deleted="(p) => onPlaylistDeletedReceived(p)">
+                </SongList>
             </div>
 
         </section>

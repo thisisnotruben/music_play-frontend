@@ -2,10 +2,16 @@
 import HomeMain from '@/components/home/HomeMain.vue';
 import HomeNav from '@/components/home/HomeNav.vue';
 import ToolbarLayout from '@/layouts/ToolbarLayout.vue';
-import { BLANK_SONG_CONTAINER } from '@/scripts/shared';
-import { ref, Suspense } from 'vue';
+import { BLANK_SONG_CONTAINER, SongContainer } from '@/scripts/shared';
+import { ref, Suspense, useTemplateRef } from 'vue';
 
-const focusOnEntry = ref(BLANK_SONG_CONTAINER);
+const deletePlaylist = ref(BLANK_SONG_CONTAINER);
+
+const homeMain = useTemplateRef('home-main');
+function goToEntry(focusOnEntry: SongContainer) {
+    console.log(homeMain.value)
+    homeMain.value?.setEntry(focusOnEntry);
+}
 </script>
 
 <template>
@@ -13,10 +19,11 @@ const focusOnEntry = ref(BLANK_SONG_CONTAINER);
 
         <Suspense>
             <template #default>
-                <HomeNav @entry-selected="(e) => focusOnEntry = e"></HomeNav>
+                <HomeNav :playlist-to-delete="deletePlaylist" @entry-selected="(e) => goToEntry(e)">
+                </HomeNav>
             </template>
         </Suspense>
-        <HomeMain :song-container="focusOnEntry"></HomeMain>
+        <HomeMain @on-playlist-deleted="(p) => deletePlaylist = p" ref="home-main"></HomeMain>
 
     </ToolbarLayout>
 </template>

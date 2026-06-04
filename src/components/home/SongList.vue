@@ -1,14 +1,18 @@
 <script setup lang="ts">
-import { instanceOfAlbumDto, instanceOfPlaylistDto } from '@/scripts/api';
+import { instanceOfAlbumDto, instanceOfPlaylistDto, type PlaylistDto } from '@/scripts/api';
 import { formatPlaybackTime } from '@/scripts/helper';
-import { playerService } from '@/scripts/service';
-import { SongContainer } from '@/scripts/shared';
-import { CirclePlus, Clock, DiscAlbum, Funnel, Hash, Pause, Play, Shuffle } from '@lucide/vue';
+import { musicPlayService, playerService } from '@/scripts/service';
+import { SongContainer, SongContainerTypes } from '@/scripts/shared';
+import { CirclePlus, CircleX, Clock, DiscAlbum, FolderX, Funnel, Hash, Pause, Play, Shuffle } from '@lucide/vue';
 import { ref, watch } from 'vue';
 
 const props = defineProps<{
     songContainer: SongContainer
 }>();
+
+const emit = defineEmits({
+    onPlaylistDeleted(p: SongContainer) { },
+});
 
 const togglePlaySongContainer = ref(false);
 watch(togglePlaySongContainer, () => {
@@ -27,6 +31,13 @@ function getHeader(): string {
         header = props.songContainer.type.name ?? '';
     }
     return header;
+}
+
+function deletePlaylist() {
+    if (instanceOfPlaylistDto(props.songContainer.type)) {
+        musicPlayService.deletePlaylist({ playlistId: (props.songContainer.type as PlaylistDto).id as number });
+        emit('onPlaylistDeleted', props.songContainer);
+    }
 }
 </script>
 
@@ -67,6 +78,12 @@ function getHeader(): string {
             <button class="btn btn-circle btn-neutral">
                 <Funnel />
             </button>
+
+            <button v-show="songContainer.typeName === SongContainerTypes.PLAYLIST" class="btn btn-circle btn-neutral"
+                onclick="song_list_dialog.showModal()">
+                <FolderX />
+            </button>
+
         </div>
 
         <table class="w-full">
@@ -118,4 +135,31 @@ function getHeader(): string {
         </table>
 
     </section>
+
+    <dialog id="song_list_dialog" class="modal">
+        <div class="modal-box bg-base-300 text-base-content">
+            <h3 class="text-center underline underline-offset-8 text-lg">
+                <strong>Delete Playlist?</strong>
+            </h3>
+
+            <div class="divider"></div>
+            <div class="flex justify-evenly">
+                <span>Playlist name:</span>
+                <span>{{ songContainer.type.name }}</span>
+            </div>
+
+            <form class="modal-action mt-4 flex justify-center" method="dialog">
+                <button class="btn btn-neutral" @click="deletePlaylist()">
+                    <FolderX />
+                    Delete
+                </button>
+                <button class="btn btn-neutral">
+                    <CircleX />
+                    Cancel
+                </button>
+            </form>
+        </div>
+
+    </dialog>
+
 </template>

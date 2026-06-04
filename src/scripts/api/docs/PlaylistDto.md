@@ -6,6 +6,7 @@
 
 Name | Type
 ------------ | -------------
+`id` | number
 `name` | string
 `coverPath` | string
 `songs` | [Array&lt;SongDto&gt;](SongDto.md)
@@ -17,6 +18,7 @@ import type { PlaylistDto } from ''
 
 // TODO: Update the object below with actual values
 const example = {
+  "id": null,
   "name": null,
   "coverPath": null,
   "songs": null,

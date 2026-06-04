@@ -1,10 +1,14 @@
 <script setup lang="ts">
 import LibEntry from '@/components/LibEntry.vue';
-import { type CreatePlaylistRequest } from '@/scripts/api';
+import { type CreatePlaylistRequest, type PlaylistDto } from '@/scripts/api';
 import { musicPlayService } from '@/scripts/service';
 import type { SongContainer } from '@/scripts/shared';
 import { CirclePlus, CircleX, FolderPen, Save, Search } from '@lucide/vue';
 import { ref, watch } from 'vue';
+
+const props = defineProps<{
+    playlistToDelete: SongContainer
+}>();
 
 const emit = defineEmits({
     entrySelected(entry: SongContainer) { },
@@ -46,6 +50,12 @@ async function createPlaylist() {
     // TODO: add validations here then close
     eval("document.querySelector('#home_nav_dialog').close();");
 }
+
+function deletePlaylist(songContainer: SongContainer) {
+    playlists.value = playlists.value.filter((p) => (songContainer.type as PlaylistDto).id != (p.type as PlaylistDto).id);
+}
+
+watch(props, (value) => deletePlaylist(value.playlistToDelete));
 </script>
 
 <template>

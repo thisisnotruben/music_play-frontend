@@ -29,6 +29,12 @@ import {
 export interface PlaylistDto {
     /**
      * 
+     * @type {number}
+     * @memberof PlaylistDto
+     */
+    id?: number;
+    /**
+     * 
      * @type {string}
      * @memberof PlaylistDto
      */
@@ -64,6 +70,7 @@ export function PlaylistDtoFromJSONTyped(json: any, ignoreDiscriminator: boolean
     }
     return {
         
+        'id': json['id'] == null ? undefined : json['id'],
         'name': json['name'] == null ? undefined : json['name'],
         'coverPath': json['coverPath'] == null ? undefined : json['coverPath'],
         'songs': json['songs'] == null ? undefined : ((json['songs'] as Array<any>).map(SongDtoFromJSON)),
@@ -81,6 +88,7 @@ export function PlaylistDtoToJSONTyped(value?: PlaylistDto | null, ignoreDiscrim
 
     return {
         
+        'id': value['id'],
         'name': value['name'],
         'coverPath': value['coverPath'],
         'songs': value['songs'] == null ? undefined : ((value['songs'] as Array<any>).map(SongDtoToJSON)),
