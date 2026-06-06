@@ -156,6 +156,7 @@ function deleteSongFromPlaylist(songDto: SongDto) {
                             <span>Length</span>
                         </span>
                     </th>
+                    <th v-if="focusedPlaylist.typeName == SongContainerTypes.PLAYLIST"></th>
                 </tr>
             </thead>
             <tbody>
@@ -175,7 +176,7 @@ function deleteSongFromPlaylist(songDto: SongDto) {
                     <td>{{ songData.name }}</td>
                     <td>{{ songData.albumName }}</td>
                     <td>{{ formatPlaybackTime(songData.length ?? 0) }}</td>
-                    <td>
+                    <td v-if="focusedPlaylist.typeName == SongContainerTypes.PLAYLIST">
                         <button class="btn btn-circle btn-ghost" @click="deleteSongFromPlaylist(songData)">
                             <CircleMinus />
                         </button>
@@ -188,7 +189,7 @@ function deleteSongFromPlaylist(songDto: SongDto) {
 
     <dialog id="song_list_dialog" class="modal">
         <div class="modal-box bg-base-300 text-base-content">
-            <h3 class="text-center underline underline-offset-8 text-lg">
+            <h3 class="text-lg">
                 <strong>Delete Playlist?</strong>
             </h3>
 
@@ -198,7 +199,7 @@ function deleteSongFromPlaylist(songDto: SongDto) {
                 <span>{{ songContainer.type.name }}</span>
             </div>
 
-            <form class="modal-action mt-4 flex justify-center" method="dialog">
+            <form class="modal-action" method="dialog">
                 <button class="btn btn-neutral" @click="deletePlaylist()">
                     <FolderX />
                     Delete
