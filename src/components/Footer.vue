@@ -1,9 +1,8 @@
 <script setup lang="ts">
 import { AudioWaveform } from '@lucide/vue';
+import { inject } from 'vue';
 
-const props = defineProps<{
-    appName: string
-}>();
+const appName = inject('appName');
 </script>
 
 <template>

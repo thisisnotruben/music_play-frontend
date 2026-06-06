@@ -6,10 +6,10 @@ import { BLANK_SONG_CONTAINER, SongContainer } from '@/scripts/shared';
 import { ref, Suspense, useTemplateRef } from 'vue';
 
 const deletePlaylist = ref(BLANK_SONG_CONTAINER);
+const editedPlaylist = ref(BLANK_SONG_CONTAINER);
 
 const homeMain = useTemplateRef('home-main');
 function goToEntry(focusOnEntry: SongContainer) {
-    console.log(homeMain.value)
     homeMain.value?.setEntry(focusOnEntry);
 }
 </script>
@@ -19,11 +19,13 @@ function goToEntry(focusOnEntry: SongContainer) {
 
         <Suspense>
             <template #default>
-                <HomeNav :playlist-to-delete="deletePlaylist" @entry-selected="(e) => goToEntry(e)">
+                <HomeNav :playlist-to-delete="deletePlaylist" :playlist-edited="editedPlaylist"
+                    @entry-selected="(e) => goToEntry(e)">
                 </HomeNav>
             </template>
         </Suspense>
-        <HomeMain @on-playlist-deleted="(p) => deletePlaylist = p" ref="home-main"></HomeMain>
+        <HomeMain @on-playlist-deleted="(p) => deletePlaylist = p" @on-playlist-edited="(e) => editedPlaylist = e"
+            ref="home-main"></HomeMain>
 
     </ToolbarLayout>
 </template>

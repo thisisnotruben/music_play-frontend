@@ -12,7 +12,7 @@ const emit = defineEmits({
 });
 
 const sections = props.type === 'all'
-    ? await musicPlayService.getAllMusic()
+    ? await musicPlayService.getArtists()
     : await musicPlayService.getExploreFeed();
 </script>
 

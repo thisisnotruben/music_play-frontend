@@ -1,12 +1,18 @@
 <script setup lang="ts">
+import type { SongDto } from '@/scripts/api/index.ts';
+import { musicPlayService, searchService } from '@/scripts/service.ts';
+import { SongContainer, SongContainerTypes, type SelectEntrySignalDto } from '@/scripts/shared';
 import { ArrowBigDownDash, AudioWaveform, House, Info, Keyboard, LogOut, Search, SquareUser, User, X } from '@lucide/vue';
-import { useKeyModifier, useMagicKeys } from '@vueuse/core';
-import { ref, watchEffect } from 'vue';
+import { useKeyModifier, useMagicKeys, watchDebounced } from '@vueuse/core';
+import { inject, ref, useTemplateRef, watch, watchEffect } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+import LibEntry from './LibEntry.vue';
 
-const props = defineProps<{
-    appName: string
-}>();
+const appName = inject('appName');
+
+const emit = defineEmits({
+    entrySelected(selection: SelectEntrySignalDto) { },
+});
 
 const router = useRouter();
 const route = useRoute();
@@ -19,9 +25,11 @@ function logout() {
 const ctrlMod = useKeyModifier('Control');
 const { k, escape } = useMagicKeys();
 const showPopupSearch = ref(false);
+const popupSeachEntry = useTemplateRef('popup-seach-entry');
 watchEffect(() => {
     if (ctrlMod.value && k?.value) {
         showPopupSearch.value = true;
+        popupSeachEntry.value?.focus();
     } else if (escape?.value) {
         showPopupSearch.value = false;
     }
@@ -32,6 +40,29 @@ document.onkeydown = function (e: KeyboardEvent) {
         e.preventDefault();
     }
 };
+
+const searchText = ref('');
+const searchFilters = ref<string[]>([]);
+const searchResults = ref<SongContainer[]>([]);
+async function search() {
+    searchResults.value = await searchService.getSearch({ query: searchText.value, filter: searchFilters.value });
+}
+watchDebounced(searchText, () => search(), { debounce: 500, maxWait: 1000 });
+watch(searchFilters, () => search());
+
+async function onEntryResultSelected(e: SongContainer) {
+    showPopupSearch.value = false;
+    let selection: SelectEntrySignalDto = { entry: e, songIdFocus: -1 }
+
+    if (e.typeName == SongContainerTypes.SONG) {
+        const song = e.type as SongDto;
+        selection = {
+            entry: await musicPlayService.getAlbum({ albumId: song.albumId as number }),
+            songIdFocus: song.id as number
+        }
+    }
+    emit('entrySelected', selection);
+}
 </script>
 
 <template>
@@ -105,23 +136,23 @@ document.onkeydown = function (e: KeyboardEvent) {
 
             <label class="input w-full">
                 <Search />
-                <input type="text" placeholder="What do you want to play?" />
+                <input type="text" placeholder="What do you want to play?" v-model="searchText"
+                    ref="popup-seach-entry" />
             </label>
 
-            <form class="flex justify-between">
-                <div class="flex gap-1">
-                    <input class="btn btn-base" type="checkbox" name="frameworks" aria-label="All" />
-                    <input class="btn btn-base" type="checkbox" name="frameworks" aria-label="Artist" />
-                    <input class="btn btn-base" type="checkbox" name="frameworks" aria-label="Album" />
-                    <input class="btn btn-base" type="checkbox" name="frameworks" aria-label="Song" />
-                </div>
-                <button class="btn btn-base" type="reset">
+            <form class="flex justify-end gap-1">
+                <input class="btn btn-base" type="checkbox" aria-label="Album" value="album" v-model="searchFilters" />
+                <input class="btn btn-base" type="checkbox" aria-label="Song" value="song" v-model="searchFilters" />
+                <button class="btn btn-base" type="reset" @click="searchFilters = []">
                     <X />
                 </button>
             </form>
-
-            <ul class="list">
-                <li></li>
+            <div class="divider"></div>
+            <ul class="menu w-full">
+                <li v-for="value in searchResults" :key="value.type.id">
+                    <LibEntry :song-container="value" :is-search-result="true"
+                        @entry-selected="(e) => onEntryResultSelected(e)"></LibEntry>
+                </li>
             </ul>
 
         </div>

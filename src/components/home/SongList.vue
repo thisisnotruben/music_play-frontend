@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { instanceOfAlbumDto, instanceOfPlaylistDto, type PlaylistDto } from '@/scripts/api';
+import { SongDtoFromJSON, type AlbumDto, type PlaylistDto } from '@/scripts/api';
 import { formatPlaybackTime } from '@/scripts/helper';
 import { musicPlayService, playerService } from '@/scripts/service';
-import { SongContainer, SongContainerTypes } from '@/scripts/shared';
-import { CirclePlus, CircleX, Clock, DiscAlbum, FolderX, Funnel, Hash, Pause, Play, Shuffle } from '@lucide/vue';
-import { ref, watch } from 'vue';
+import { BLANK_SONG_CONTAINER, SongContainer, SongContainerTypes } from '@/scripts/shared';
+import { CirclePlus, CircleX, Clock, DiscAlbum, FolderPen, FolderX, Funnel, Hash, Pause, Play, Shuffle } from '@lucide/vue';
+import { computed, ref, watch } from 'vue';
+import CreateEditPlaylistDialog from '../CreateEditPlaylistDialog.vue';
 
 const props = defineProps<{
     songContainer: SongContainer
@@ -12,6 +13,7 @@ const props = defineProps<{
 
 const emit = defineEmits({
     onPlaylistDeleted(p: SongContainer) { },
+    onPlaylistEdited(p: SongContainer) { },
 });
 
 const togglePlaySongContainer = ref(false);
@@ -23,21 +25,45 @@ watch(togglePlaySongContainer, () => {
     }
 });
 
-function getHeader(): string {
-    let header = '';
-    if (instanceOfAlbumDto(props.songContainer.type)) {
-        header = props.songContainer.type.artistName ?? '';
-    } else if (instanceOfPlaylistDto(props.songContainer.type)) {
-        header = props.songContainer.type.name ?? '';
+const focusedPlaylist = ref(BLANK_SONG_CONTAINER);
+watch(props, (v) => focusedPlaylist.value = v.songContainer);
+
+const focusedCoverPath = computed(() => { return focusedPlaylist.value.coverPath; });
+
+const focusedTitle = computed(() => {
+    console.log("title changed");
+    let title = '';
+    switch (focusedPlaylist.value.typeName) {
+        case SongContainerTypes.ALBUM:
+            title = (focusedPlaylist.value.type as AlbumDto).name ?? '';
+            break;
+        case SongContainerTypes.PLAYLIST:
+            title = focusedPlaylist.value.type.name ?? '';
+            break;
     }
-    return header;
-}
+    console.log(title);
+    return title;
+});
+
+const focusedSubtitle = computed(() => {
+    switch (focusedPlaylist.value.typeName) {
+        case SongContainerTypes.ALBUM:
+            return (props.songContainer.type as AlbumDto).artistName;
+        default:
+            return '';
+    }
+});
 
 function deletePlaylist() {
-    if (instanceOfPlaylistDto(props.songContainer.type)) {
+    if (props.songContainer.typeName == SongContainerTypes.PLAYLIST) {
         musicPlayService.deletePlaylist({ playlistId: (props.songContainer.type as PlaylistDto).id as number });
         emit('onPlaylistDeleted', props.songContainer);
     }
+}
+
+function editPlaylist(p: SongContainer) {
+    focusedPlaylist.value = p;
+    emit('onPlaylistEdited', p);
 }
 </script>
 
@@ -47,42 +73,52 @@ function deletePlaylist() {
         <figure class="flex gap-2 mt-4">
 
             <div>
-                <img class="min-w-48 max-w-48" :src="songContainer.coverPath" />
-                <span class="text-sm">{{ songContainer.typeName }}</span>
+                <img class="min-w-48 max-w-48" :src="focusedCoverPath" />
+                <span class="text-sm capitalize">{{ songContainer.typeName }}</span>
             </div>
 
             <figcaption class="flex flex-col">
-                <strong class="underline underline-offset-8 text-lg mb-2">{{ getHeader() }}</strong>
-                <span class="text-base">{{ songContainer.type.name }}</span>
+                <strong class="underline underline-offset-8 text-lg mb-2">{{ focusedTitle }}</strong>
+                <span class="text-base">{{ focusedSubtitle }}</span>
             </figcaption>
         </figure>
 
-        <div class="flex gap-2 items-center">
-            <button class="btn btn-circle btn-xl btn-primary"
-                @click="togglePlaySongContainer = !togglePlaySongContainer">
-                <label class="swap">
-                    <input type="checkbox" />
-                    <Pause class="swap-on" />
-                    <Play class="swap-off" />
-                </label>
-            </button>
+        <div class="flex justify-between">
 
-            <button class="btn btn-circle btn-neutral" @click="playerService.toggleShuffle()">
-                <Shuffle />
-            </button>
+            <div class="flex items-center   gap-2">
 
-            <button class="btn btn-circle btn-neutral">
-                <CirclePlus />
-            </button>
 
-            <button class="btn btn-circle btn-neutral">
-                <Funnel />
-            </button>
+                <button class="btn btn-circle btn-xl btn-primary"
+                    @click="togglePlaySongContainer = !togglePlaySongContainer">
+                    <label class="swap">
+                        <input type="checkbox" />
+                        <Pause class="swap-on" />
+                        <Play class="swap-off" />
+                    </label>
+                </button>
 
-            <button v-show="songContainer.typeName === SongContainerTypes.PLAYLIST" class="btn btn-circle btn-neutral"
-                onclick="song_list_dialog.showModal()">
-                <FolderX />
-            </button>
+                <button class="btn btn-circle btn-neutral" @click="playerService.toggleShuffle()">
+                    <Shuffle />
+                </button>
+
+                <button class="btn btn-circle btn-neutral">
+                    <Funnel />
+                </button>
+            </div>
+
+            <div v-show="songContainer.typeName === SongContainerTypes.PLAYLIST" class="flex gap-2">
+                <button class="btn btn-circle btn-neutral">
+                    <CirclePlus />
+                </button>
+
+                <button class="btn btn-circle btn-neutral" onclick="song_list_edit_playlist_dialog.showModal()">
+                    <FolderPen />
+                </button>
+
+                <button class="btn btn-circle btn-neutral" onclick="song_list_dialog.showModal()">
+                    <FolderX />
+                </button>
+            </div>
 
         </div>
 
@@ -161,5 +197,9 @@ function deletePlaylist() {
         </div>
 
     </dialog>
+
+    <CreateEditPlaylistDialog id="song_list_edit_playlist_dialog" type="edit" :playlist-to-edit="songContainer"
+        @on-playlist-edited="(e) => editPlaylist(e)">
+    </CreateEditPlaylistDialog>
 
 </template>

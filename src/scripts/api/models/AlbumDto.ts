@@ -32,7 +32,7 @@ export interface AlbumDto {
      * @type {string}
      * @memberof AlbumDto
      */
-    name?: string;
+    type?: string;
     /**
      * 
      * @type {string}
@@ -41,10 +41,28 @@ export interface AlbumDto {
     coverPath?: string;
     /**
      * 
+     * @type {number}
+     * @memberof AlbumDto
+     */
+    id?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof AlbumDto
+     */
+    name?: string;
+    /**
+     * 
      * @type {string}
      * @memberof AlbumDto
      */
     artistName?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof AlbumDto
+     */
+    artistId?: number;
     /**
      * 
      * @type {Array<SongDto>}
@@ -70,9 +88,12 @@ export function AlbumDtoFromJSONTyped(json: any, ignoreDiscriminator: boolean): 
     }
     return {
         
-        'name': json['name'] == null ? undefined : json['name'],
+        'type': json['type'] == null ? undefined : json['type'],
         'coverPath': json['coverPath'] == null ? undefined : json['coverPath'],
+        'id': json['id'] == null ? undefined : json['id'],
+        'name': json['name'] == null ? undefined : json['name'],
         'artistName': json['artistName'] == null ? undefined : json['artistName'],
+        'artistId': json['artistId'] == null ? undefined : json['artistId'],
         'songs': json['songs'] == null ? undefined : ((json['songs'] as Array<any>).map(SongDtoFromJSON)),
     };
 }
@@ -88,9 +109,12 @@ export function AlbumDtoToJSONTyped(value?: AlbumDto | null, ignoreDiscriminator
 
     return {
         
-        'name': value['name'],
+        'type': value['type'],
         'coverPath': value['coverPath'],
+        'id': value['id'],
+        'name': value['name'],
         'artistName': value['artistName'],
+        'artistId': value['artistId'],
         'songs': value['songs'] == null ? undefined : ((value['songs'] as Array<any>).map(SongDtoToJSON)),
     };
 }

@@ -10,7 +10,7 @@ All URIs are relative to *http://localhost:8080*
 
 ## getSearch
 
-> SearchResponseDto getSearch(query, filter)
+> { [key: string]: any; } getSearch(query, filter)
 
 Search for artist/album/song name with filters
 
@@ -56,7 +56,7 @@ example().catch(console.error);
 
 ### Return type
 
-[**SearchResponseDto**](SearchResponseDto.md)
+**{ [key: string]: any; }**
 
 ### Authorization
 
@@ -73,7 +73,7 @@ No authorization required
 |-------------|-------------|------------------|
 | **404** | Not Found |  -  |
 | **400** | Bad Request |  -  |
-| **200** | OK |  -  |
+| **200** | Ok |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 

@@ -6,9 +6,12 @@
 
 Name | Type
 ------------ | -------------
-`name` | string
+`type` | string
 `coverPath` | string
+`id` | number
+`name` | string
 `artistName` | string
+`artistId` | number
 `songs` | [Array&lt;SongDto&gt;](SongDto.md)
 
 ## Example
@@ -18,9 +21,12 @@ import type { AlbumDto } from ''
 
 // TODO: Update the object below with actual values
 const example = {
-  "name": null,
+  "type": null,
   "coverPath": null,
+  "id": null,
+  "name": null,
   "artistName": null,
+  "artistId": null,
   "songs": null,
 } satisfies AlbumDto
 

@@ -24,57 +24,73 @@ import {
 /**
  * 
  * @export
- * @interface AllMusicDto
+ * @interface ArtistDto
  */
-export interface AllMusicDto {
+export interface ArtistDto {
     /**
      * 
      * @type {string}
-     * @memberof AllMusicDto
+     * @memberof ArtistDto
      */
-    artistName?: string;
+    type?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ArtistDto
+     */
+    coverPath?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ArtistDto
+     */
+    name?: string;
     /**
      * 
      * @type {Array<AlbumDto>}
-     * @memberof AllMusicDto
+     * @memberof ArtistDto
      */
     albums?: Array<AlbumDto>;
 }
 
 /**
- * Check if a given object implements the AllMusicDto interface.
+ * Check if a given object implements the ArtistDto interface.
  */
-export function instanceOfAllMusicDto(value: object): value is AllMusicDto {
+export function instanceOfArtistDto(value: object): value is ArtistDto {
     return true;
 }
 
-export function AllMusicDtoFromJSON(json: any): AllMusicDto {
-    return AllMusicDtoFromJSONTyped(json, false);
+export function ArtistDtoFromJSON(json: any): ArtistDto {
+    return ArtistDtoFromJSONTyped(json, false);
 }
 
-export function AllMusicDtoFromJSONTyped(json: any, ignoreDiscriminator: boolean): AllMusicDto {
+export function ArtistDtoFromJSONTyped(json: any, ignoreDiscriminator: boolean): ArtistDto {
     if (json == null) {
         return json;
     }
     return {
         
-        'artistName': json['artistName'] == null ? undefined : json['artistName'],
+        'type': json['type'] == null ? undefined : json['type'],
+        'coverPath': json['coverPath'] == null ? undefined : json['coverPath'],
+        'name': json['name'] == null ? undefined : json['name'],
         'albums': json['albums'] == null ? undefined : ((json['albums'] as Array<any>).map(AlbumDtoFromJSON)),
     };
 }
 
-export function AllMusicDtoToJSON(json: any): AllMusicDto {
-    return AllMusicDtoToJSONTyped(json, false);
+export function ArtistDtoToJSON(json: any): ArtistDto {
+    return ArtistDtoToJSONTyped(json, false);
 }
 
-export function AllMusicDtoToJSONTyped(value?: AllMusicDto | null, ignoreDiscriminator: boolean = false): any {
+export function ArtistDtoToJSONTyped(value?: ArtistDto | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
 
     return {
         
-        'artistName': value['artistName'],
+        'type': value['type'],
+        'coverPath': value['coverPath'],
+        'name': value['name'],
         'albums': value['albums'] == null ? undefined : ((value['albums'] as Array<any>).map(AlbumDtoToJSON)),
     };
 }

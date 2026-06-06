@@ -1,24 +1,28 @@
 
-# AllMusicDto
+# ArtistDto
 
 
 ## Properties
 
 Name | Type
 ------------ | -------------
-`artistName` | string
+`type` | string
+`coverPath` | string
+`name` | string
 `albums` | [Array&lt;AlbumDto&gt;](AlbumDto.md)
 
 ## Example
 
 ```typescript
-import type { AllMusicDto } from ''
+import type { ArtistDto } from ''
 
 // TODO: Update the object below with actual values
 const example = {
-  "artistName": null,
+  "type": null,
+  "coverPath": null,
+  "name": null,
   "albums": null,
-} satisfies AllMusicDto
+} satisfies ArtistDto
 
 console.log(example)
 
@@ -27,7 +31,7 @@ const exampleJSON: string = JSON.stringify(example)
 console.log(exampleJSON)
 
 // Parse the JSON string back to an object
-const exampleParsed = JSON.parse(exampleJSON) as AllMusicDto
+const exampleParsed = JSON.parse(exampleJSON) as ArtistDto
 console.log(exampleParsed)
 ```
 

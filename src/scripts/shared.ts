@@ -3,17 +3,17 @@ import type { AlbumDto, PlaylistDto, SongDto } from "./api";
 export const SongContainerTypes = {
     ALBUM: 'album',
     PLAYLIST: 'playlist',
-    DIRECTORY: 'Directory',
+    SONG: 'Song',
     BLANK: 'Blank'
 }
 
 export class SongContainer {
 
-    type: AlbumDto | PlaylistDto;
+    type: AlbumDto | PlaylistDto | SongDto;
     coverPath: string;
     typeName: string;
 
-    constructor(type: AlbumDto | PlaylistDto, coverPath: string, typeName: string) {
+    constructor(type: AlbumDto | PlaylistDto | SongDto, coverPath: string, typeName: string) {
         this.type = type;
         this.coverPath = coverPath;
         this.typeName = typeName;
@@ -30,6 +30,11 @@ export const LoopType = {
     OFF: 0,
     ALL: 1,
     SINGULAR: 2,
+}
+
+export type SelectEntrySignalDto = {
+    entry: SongContainer,
+    songIdFocus: number
 }
 
 export const BLANK_SONG_CONTAINER = new SongContainer({}, SongContainerTypes.BLANK, SongContainerTypes.BLANK );
@@ -99,63 +104,55 @@ export class Player {
 
 }
 
-export class SongSource {
+// export class SongSource {
 
-    #source: SongContainer;
-    #currSong: SongDto | null
+//     #source: SongContainer;
+//     #currSong: SongDto | null
 
-    constructor(source: SongContainer) {
-        this.#source = source;
-        this.#currSong = source.type.songs?.at(0) as SongDto;
-    }
+//     constructor(source: SongContainer) {
+//         this.#source = source;
+//         this.#currSong = source.type.songs?.at(0) as SongDto;
+//     }
 
-    getCurrentSong(): SongDto | null {
-        return this.#currSong;
-    }
+//     getCurrentSong(): SongDto | null {
+//         return this.#currSong;
+//     }
 
 
 
-    getPrevSong(loopType: Number, shuffle: boolean): SongDto | null {
-        let currIndex = this.#source.type.songs?.indexOf(this.#currSong as SongDto) ?? -1;
-        switch (loopType) {
-            case LoopType.OFF:
-                this.#currSong = this.#source.type.songs?.at(Math.max(0, currIndex - 1)) as SongDto;
-                break;
-            case LoopType.ALL:
-                this.#currSong = this.#source.type.songs?.at((currIndex - 1) % this.#source.type.songs.length) as SongDto;
-                break;
-            case LoopType.SINGULAR:
-                break;
-            default:
-                break;
+//     getPrevSong(loopType: Number, shuffle: boolean): SongDto | null {
+//         let currIndex = this.#source.type.songs?.indexOf(this.#currSong as SongDto) ?? -1;
+//         switch (loopType) {
+//             case LoopType.OFF:
+//                 this.#currSong = this.#source.type.songs?.at(Math.max(0, currIndex - 1)) as SongDto;
+//                 break;
+//             case LoopType.ALL:
+//                 this.#currSong = this.#source.type.songs?.at((currIndex - 1) % this.#source.type.songs.length) as SongDto;
+//                 break;
+//             case LoopType.SINGULAR:
+//                 break;
+//             default:
+//                 break;
 
-        }
-        return this.#currSong;
-    }
+//         }
+//         return this.#currSong;
+//     }
 
-    getNextSong(loopType: Number, shuffle: boolean): SongDto | null {
-        let currIndex = this.#source.type.songs?.indexOf(this.#currSong as SongDto) ?? -1;
-        switch (loopType) {
-            case LoopType.OFF:
-                this.#currSong = this.#source.type.songs?.at(Math.min(this.#source.type.songs.length - 1, currIndex + 1)) as SongDto;
-                break;
-            case LoopType.ALL:
-                this.#currSong = this.#source.type.songs?.at((currIndex + 1) % this.#source.type.songs.length) as SongDto;
-                break;
-            case LoopType.SINGULAR:
-                break;
-            default:
-                break;
-        }
-        return this.#currSong;
-    }
+//     getNextSong(loopType: Number, shuffle: boolean): SongDto | null {
+//         let currIndex = this.#source.type.songs?.indexOf(this.#currSong as SongDto) ?? -1;
+//         switch (loopType) {
+//             case LoopType.OFF:
+//                 this.#currSong = this.#source.type.songs?.at(Math.min(this.#source.type.songs.length - 1, currIndex + 1)) as SongDto;
+//                 break;
+//             case LoopType.ALL:
+//                 this.#currSong = this.#source.type.songs?.at((currIndex + 1) % this.#source.type.songs.length) as SongDto;
+//                 break;
+//             case LoopType.SINGULAR:
+//                 break;
+//             default:
+//                 break;
+//         }
+//         return this.#currSong;
+//     }
 
-}
-
-export class Navigator {
-
-    goTo(SongContainer: SongContainer) {
-
-    }
-}
-
+// }

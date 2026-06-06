@@ -19,7 +19,6 @@ const password = ref(props.passedPassword ?? '');
 
 const fieldsClean = ref(true);
 if (props.passedUsername && props.passedPassword) {
-    console.log("fields populated")
     watch(username, () => {
         if (props.passedUsername != username.value) {
             fieldsClean.value = false;

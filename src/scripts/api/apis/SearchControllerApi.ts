@@ -18,11 +18,6 @@ import {
     ErrorResponseDtoFromJSON,
     ErrorResponseDtoToJSON,
 } from '../models/ErrorResponseDto';
-import {
-    type SearchResponseDto,
-    SearchResponseDtoFromJSON,
-    SearchResponseDtoToJSON,
-} from '../models/SearchResponseDto';
 
 export interface GetSearchRequest {
     query: string;
@@ -71,17 +66,21 @@ export class SearchControllerApi extends runtime.BaseAPI {
     /**
      * Search for artist/album/song name with filters
      */
-    async getSearchRaw(requestParameters: GetSearchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<SearchResponseDto>> {
+    async getSearchRaw(requestParameters: GetSearchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<{ [key: string]: any; }>> {
         const requestOptions = await this.getSearchRequestOpts(requestParameters);
         const response = await this.request(requestOptions, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => SearchResponseDtoFromJSON(jsonValue));
+        if (this.isJsonMime(response.headers.get('content-type'))) {
+            return new runtime.JSONApiResponse<{ [key: string]: any; }>(response);
+        } else {
+            return new runtime.TextApiResponse(response) as any;
+        }
     }
 
     /**
      * Search for artist/album/song name with filters
      */
-    async getSearch(requestParameters: GetSearchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<SearchResponseDto> {
+    async getSearch(requestParameters: GetSearchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<{ [key: string]: any; }> {
         const response = await this.getSearchRaw(requestParameters, initOverrides);
         return await response.value();
     }

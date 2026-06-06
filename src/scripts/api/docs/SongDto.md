@@ -6,11 +6,16 @@
 
 Name | Type
 ------------ | -------------
+`type` | string
+`coverPath` | string
+`id` | number
 `name` | string
 `genre` | string
 `length` | number
 `audioPath` | string
 `albumName` | string
+`albumId` | number
+`artistName` | string
 
 ## Example
 
@@ -19,11 +24,16 @@ import type { SongDto } from ''
 
 // TODO: Update the object below with actual values
 const example = {
+  "type": null,
+  "coverPath": null,
+  "id": null,
   "name": null,
   "genre": null,
   "length": null,
   "audioPath": null,
   "albumName": null,
+  "albumId": null,
+  "artistName": null,
 } satisfies SongDto
 
 console.log(example)

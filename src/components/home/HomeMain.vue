@@ -1,13 +1,14 @@
 <script setup lang="ts">
-import { BLANK_SONG_CONTAINER, SongContainer } from '@/scripts/shared';
+import { BLANK_SONG_CONTAINER, SongContainer, type SelectEntrySignalDto } from '@/scripts/shared';
 import { Folder, FolderOpen, Telescope } from '@lucide/vue';
-import { ref, Suspense, useTemplateRef, watch } from 'vue';
+import { inject, ref, Suspense, useTemplateRef, watch } from 'vue';
 import HomeMainTabSection from './HomeMainTabSection.vue';
 import HomeMainTabSectionSkeleton from './HomeMainTabSectionSkeleton.vue';
 import SongList from './SongList.vue';
 
 const emit = defineEmits({
     onPlaylistDeleted(p: SongContainer) { },
+    onPlaylistEdited(p: SongContainer) { },
 });
 
 const entryFocusedLabel = ref('');
@@ -32,7 +33,13 @@ function onPlaylistDeletedReceived(p: SongContainer) {
     emit('onPlaylistDeleted', p);
 }
 
-defineExpose({ setEntry })
+const searchSelected = inject('searchResultSelected', ref<SelectEntrySignalDto>({ entry: BLANK_SONG_CONTAINER, songIdFocus: -1 }));
+watch(searchSelected, (value) => {
+    setEntry(value.entry);
+    // TODO: focus on song and play
+});
+
+defineExpose({ setEntry });
 </script>
 
 <template>
@@ -80,7 +87,8 @@ defineExpose({ setEntry })
             </label>
             <div class="tab-content">
                 <SongList class="h-192" :song-container="entry"
-                    @on-playlist-deleted="(p) => onPlaylistDeletedReceived(p)">
+                    @on-playlist-deleted="(p) => onPlaylistDeletedReceived(p)"
+                    @on-playlist-edited="(p) => $emit('onPlaylistEdited', p)">
                 </SongList>
             </div>
 

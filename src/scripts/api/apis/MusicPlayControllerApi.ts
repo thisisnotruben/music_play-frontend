@@ -19,10 +19,10 @@ import {
     AlbumDtoToJSON,
 } from '../models/AlbumDto';
 import {
-    type AllMusicDto,
-    AllMusicDtoFromJSON,
-    AllMusicDtoToJSON,
-} from '../models/AllMusicDto';
+    type ArtistDto,
+    ArtistDtoFromJSON,
+    ArtistDtoToJSON,
+} from '../models/ArtistDto';
 import {
     type ErrorResponseDto,
     ErrorResponseDtoFromJSON,
@@ -56,6 +56,16 @@ export interface DeletePlaylistRequest {
 export interface DeleteSongFromPlaylistRequest {
     songId: number;
     playlistId: number;
+}
+
+export interface EditPLaylistRequest {
+    playlistId: number;
+    newName?: string;
+    file?: Blob;
+}
+
+export interface GetAlbumRequest {
+    albumId: number;
 }
 
 /**
@@ -105,7 +115,7 @@ export class MusicPlayControllerApi extends runtime.BaseAPI {
     }
 
     /**
-     * Add song to a specific playlist
+     * Add song to playlist
      */
     async addSongToPlaylistRaw(requestParameters: AddSongToPlaylistRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const requestOptions = await this.addSongToPlaylistRequestOpts(requestParameters);
@@ -115,7 +125,7 @@ export class MusicPlayControllerApi extends runtime.BaseAPI {
     }
 
     /**
-     * Add song to a specific playlist
+     * Add song to playlist
      */
     async addSongToPlaylist(requestParameters: AddSongToPlaylistRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.addSongToPlaylistRaw(requestParameters, initOverrides);
@@ -279,7 +289,7 @@ export class MusicPlayControllerApi extends runtime.BaseAPI {
     }
 
     /**
-     * Delete song from a specific playlist
+     * Delete song from playlist
      */
     async deleteSongFromPlaylistRaw(requestParameters: DeleteSongFromPlaylistRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const requestOptions = await this.deleteSongFromPlaylistRequestOpts(requestParameters);
@@ -289,10 +299,131 @@ export class MusicPlayControllerApi extends runtime.BaseAPI {
     }
 
     /**
-     * Delete song from a specific playlist
+     * Delete song from playlist
      */
     async deleteSongFromPlaylist(requestParameters: DeleteSongFromPlaylistRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.deleteSongFromPlaylistRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * Creates request options for editPLaylist without sending the request
+     */
+    async editPLaylistRequestOpts(requestParameters: EditPLaylistRequest): Promise<runtime.RequestOpts> {
+        if (requestParameters['playlistId'] == null) {
+            throw new runtime.RequiredError(
+                'playlistId',
+                'Required parameter "playlistId" was null or undefined when calling editPLaylist().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        if (requestParameters['playlistId'] != null) {
+            queryParameters['playlistId'] = requestParameters['playlistId'];
+        }
+
+        if (requestParameters['newName'] != null) {
+            queryParameters['newName'] = requestParameters['newName'];
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const consumes: runtime.Consume[] = [
+            { contentType: 'multipart/form-data' },
+        ];
+        // @ts-ignore: canConsumeForm may be unused
+        const canConsumeForm = runtime.canConsumeForm(consumes);
+
+        let formParams: { append(param: string, value: any): any };
+        let useForm = false;
+        // use FormData to transmit files using content-type "multipart/form-data"
+        useForm = canConsumeForm;
+        if (useForm) {
+            formParams = new FormData();
+        } else {
+            formParams = new URLSearchParams();
+        }
+
+        if (requestParameters['file'] != null) {
+            formParams.append('file', requestParameters['file'] as any);
+        }
+
+
+        let urlPath = `/api/v1/editPlaylist`;
+
+        return {
+            path: urlPath,
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: formParams,
+        };
+    }
+
+    /**
+     * Edits a playlist
+     */
+    async editPLaylistRaw(requestParameters: EditPLaylistRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PlaylistDto>> {
+        const requestOptions = await this.editPLaylistRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => PlaylistDtoFromJSON(jsonValue));
+    }
+
+    /**
+     * Edits a playlist
+     */
+    async editPLaylist(requestParameters: EditPLaylistRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PlaylistDto> {
+        const response = await this.editPLaylistRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Creates request options for getAlbum without sending the request
+     */
+    async getAlbumRequestOpts(requestParameters: GetAlbumRequest): Promise<runtime.RequestOpts> {
+        if (requestParameters['albumId'] == null) {
+            throw new runtime.RequiredError(
+                'albumId',
+                'Required parameter "albumId" was null or undefined when calling getAlbum().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        if (requestParameters['albumId'] != null) {
+            queryParameters['albumId'] = requestParameters['albumId'];
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+
+        let urlPath = `/api/v1/getAlbum`;
+
+        return {
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        };
+    }
+
+    /**
+     * Get album
+     */
+    async getAlbumRaw(requestParameters: GetAlbumRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AlbumDto>> {
+        const requestOptions = await this.getAlbumRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => AlbumDtoFromJSON(jsonValue));
+    }
+
+    /**
+     * Get album
+     */
+    async getAlbum(requestParameters: GetAlbumRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AlbumDto> {
+        const response = await this.getAlbumRaw(requestParameters, initOverrides);
+        return await response.value();
     }
 
     /**
@@ -333,15 +464,15 @@ export class MusicPlayControllerApi extends runtime.BaseAPI {
     }
 
     /**
-     * Creates request options for getAllMusic without sending the request
+     * Creates request options for getArtists without sending the request
      */
-    async getAllMusicRequestOpts(): Promise<runtime.RequestOpts> {
+    async getArtistsRequestOpts(): Promise<runtime.RequestOpts> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
 
 
-        let urlPath = `/api/v1/getAllMusic`;
+        let urlPath = `/api/v1/getArtists`;
 
         return {
             path: urlPath,
@@ -352,20 +483,20 @@ export class MusicPlayControllerApi extends runtime.BaseAPI {
     }
 
     /**
-     * Get all music of library entire
+     * Get all artists
      */
-    async getAllMusicRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<AllMusicDto>>> {
-        const requestOptions = await this.getAllMusicRequestOpts();
+    async getArtistsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<ArtistDto>>> {
+        const requestOptions = await this.getArtistsRequestOpts();
         const response = await this.request(requestOptions, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(AllMusicDtoFromJSON));
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(ArtistDtoFromJSON));
     }
 
     /**
-     * Get all music of library entire
+     * Get all artists
      */
-    async getAllMusic(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AllMusicDto>> {
-        const response = await this.getAllMusicRaw(initOverrides);
+    async getArtists(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<ArtistDto>> {
+        const response = await this.getArtistsRaw(initOverrides);
         return await response.value();
     }
 

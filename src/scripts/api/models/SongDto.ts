@@ -24,6 +24,24 @@ export interface SongDto {
      * @type {string}
      * @memberof SongDto
      */
+    type?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SongDto
+     */
+    coverPath?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof SongDto
+     */
+    id?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof SongDto
+     */
     name?: string;
     /**
      * 
@@ -49,6 +67,18 @@ export interface SongDto {
      * @memberof SongDto
      */
     albumName?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof SongDto
+     */
+    albumId?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof SongDto
+     */
+    artistName?: string;
 }
 
 /**
@@ -68,11 +98,16 @@ export function SongDtoFromJSONTyped(json: any, ignoreDiscriminator: boolean): S
     }
     return {
         
+        'type': json['type'] == null ? undefined : json['type'],
+        'coverPath': json['coverPath'] == null ? undefined : json['coverPath'],
+        'id': json['id'] == null ? undefined : json['id'],
         'name': json['name'] == null ? undefined : json['name'],
         'genre': json['genre'] == null ? undefined : json['genre'],
         'length': json['length'] == null ? undefined : json['length'],
         'audioPath': json['audioPath'] == null ? undefined : json['audioPath'],
         'albumName': json['albumName'] == null ? undefined : json['albumName'],
+        'albumId': json['albumId'] == null ? undefined : json['albumId'],
+        'artistName': json['artistName'] == null ? undefined : json['artistName'],
     };
 }
 
@@ -87,11 +122,16 @@ export function SongDtoToJSONTyped(value?: SongDto | null, ignoreDiscriminator: 
 
     return {
         
+        'type': value['type'],
+        'coverPath': value['coverPath'],
+        'id': value['id'],
         'name': value['name'],
         'genre': value['genre'],
         'length': value['length'],
         'audioPath': value['audioPath'],
         'albumName': value['albumName'],
+        'albumId': value['albumId'],
+        'artistName': value['artistName'],
     };
 }
 

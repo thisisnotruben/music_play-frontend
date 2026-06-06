@@ -1,10 +1,12 @@
 <script setup lang="ts">
-import { SongContainer } from '@/scripts/shared';
+import type { AlbumDto, SongDto } from '@/scripts/api';
+import { SongContainer, SongContainerTypes } from '@/scripts/shared';
 import { useCountdown } from '@vueuse/core';
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 
 const props = defineProps<{
     songContainer: SongContainer
+    isSearchResult?: boolean
 }>();
 
 const emit = defineEmits({
@@ -13,6 +15,8 @@ const emit = defineEmits({
 
 // NOTICE: used for creating playlists where the image isn't instantly available.
 const imgPath = ref(props.songContainer.coverPath);
+watch(props, (v) => imgPath.value = v.songContainer.coverPath);
+
 function onErrorLoadingImg() {
     useCountdown(0.25, {
         onComplete() {
@@ -27,9 +31,23 @@ function onErrorLoadingImg() {
 
         <img v-if="imgPath.length > 0" class="w-12 ml-4" :src="imgPath" :onerror="onErrorLoadingImg()" />
 
-        <figcaption class="flex flex-col">
-            <strong class="truncate max-w-48">{{ songContainer.type.name }}</strong>
-            <span>{{ songContainer.typeName }}</span>
+        <figcaption v-if="isSearchResult" class="flex items-center grow">
+            <div class="flex flex-col justify-between grow">
+                <strong>{{ songContainer.type.name }}</strong>
+                <span v-if="songContainer.typeName == SongContainerTypes.ALBUM">
+                    {{ (songContainer.type as AlbumDto).artistName }}
+                </span>
+                <span v-if="songContainer.typeName == SongContainerTypes.SONG">
+                    {{ (songContainer.type as SongDto).artistName }}
+                </span>
+            </div>
+            <span class="capitalize">{{ songContainer.typeName }}</span>
         </figcaption>
+
+        <figcaption v-else class="flex flex-col grow">
+            <strong class="truncate max-w-48">{{ songContainer.type.name }}</strong>
+            <span class="capitalize">{{ songContainer.typeName }}</span>
+        </figcaption>
+
     </figure>
 </template>

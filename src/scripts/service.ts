@@ -1,5 +1,5 @@
-import { AccountControllerApi, Configuration, MusicPlayControllerApi, type AddSongToPlaylistRequest, type CreateAccountRequest, type CreatePlaylistRequest, type DeletePlaylistRequest, type DeleteSongFromPlaylistRequest, type EditEmailRequest, type EditFirstNameRequest, type EditLastNameRequest, type EditPasswordRequest, type EditUsernameRequest, type LoginRequest } from './api/index';
-import { BLANK_SONG_CONTAINER, Navigator, Player, SongContainer, SongContainerTypes } from './shared';
+import { AccountControllerApi, Configuration, MusicPlayControllerApi, SearchControllerApi, type AddSongToPlaylistRequest, type CreateAccountRequest, type CreatePlaylistRequest, type DeletePlaylistRequest, type DeleteSongFromPlaylistRequest, type EditEmailRequest, type EditFirstNameRequest, type EditLastNameRequest, type EditPasswordRequest, type EditPLaylistRequest, type EditUsernameRequest, type GetAlbumRequest, type GetSearchRequest, type LoginRequest } from './api/index';
+import { BLANK_SONG_CONTAINER, Player, SongContainer, SongContainerTypes } from './shared';
 
 
 const apiAppStorageUrl: string = import.meta.env.VITE_API_APP_STORAGE_URL;
@@ -7,6 +7,11 @@ const apiUserStorageUrl: string = import.meta.env.VITE_API_USER_STORAGE_URL;
 const config = new Configuration({
     basePath: import.meta.env.VITE_API_URL,
 });
+
+
+function getFullPath(coverPath: string, urlPath = apiAppStorageUrl): string {
+    return coverPath.length > 0 ? `${urlPath}/${coverPath}` : '';
+}
 
 class MusicPlayService {
 
@@ -16,7 +21,15 @@ class MusicPlayService {
         const createdPlaylist = await this.api.createPlaylist(requestParameters);
         return new SongContainer(
             createdPlaylist,
-            this.#getFullPath(createdPlaylist.coverPath ?? '', apiUserStorageUrl),
+            getFullPath(createdPlaylist.coverPath ?? '', apiUserStorageUrl),
+            SongContainerTypes.PLAYLIST);
+    }
+
+    async editPlaylist(requestParameters: EditPLaylistRequest): Promise<SongContainer> {
+        const editedPlaylist = await this.api.editPLaylist(requestParameters);
+        return new SongContainer(
+            editedPlaylist,
+            getFullPath(editedPlaylist.coverPath ?? '', apiUserStorageUrl),
             SongContainerTypes.PLAYLIST);
     }
 
@@ -32,17 +45,35 @@ class MusicPlayService {
         this.api.deleteSongFromPlaylist(requestParameters);
     }
 
+    async getAlbum(requestParameters: GetAlbumRequest): Promise<SongContainer> {
+        const res = await this.api.getAlbum(requestParameters);
+        return new SongContainer(res, getFullPath(res.coverPath ?? ''), SongContainerTypes.ALBUM);
+    }
+
     async getAlbums(): Promise<SongContainer[]> {
         return (await this.api.getAlbums()).map((albumDto) =>
             new SongContainer(albumDto,
-                this.#getFullPath(albumDto.coverPath ?? ''),
+                getFullPath(albumDto.coverPath ?? ''),
                 SongContainerTypes.ALBUM));
+    }
+
+    async getArtists(): Promise<Map<string, SongContainer[]>> {
+        const response = new Map<string, SongContainer[]>();
+
+        (await this.api.getArtists()).map((artistDto) => {
+            response.set(artistDto.name as string, artistDto.albums?.map(
+                albumDto => new SongContainer(albumDto,
+                    getFullPath(albumDto.coverPath ?? ''),
+                    SongContainerTypes.ALBUM)) ?? []);
+        });
+
+        return response;
     }
 
     async getPlaylists(): Promise<SongContainer[]> {
         return (await this.api.getPlaylists()).map((playlistDto) =>
             new SongContainer(playlistDto,
-                this.#getFullPath(playlistDto.coverPath ?? '', apiUserStorageUrl),
+                getFullPath(playlistDto.coverPath ?? '', apiUserStorageUrl),
                 SongContainerTypes.PLAYLIST));
     }
 
@@ -50,19 +81,6 @@ class MusicPlayService {
         // TODO
         const response = new Map<string, SongContainer[]>();
         // const exploreFeed = await this.#api.getExploreFeed();
-        return response;
-    }
-
-    async getAllMusic(): Promise<Map<string, SongContainer[]>> {
-        const response = new Map<string, SongContainer[]>();
-
-        (await this.api.getAllMusic()).map((allMusicDto) => {
-            response.set(allMusicDto.artistName as string, allMusicDto.albums?.map(
-                albumDto => new SongContainer(albumDto,
-                    this.#getFullPath(albumDto.coverPath ?? ''),
-                    SongContainerTypes.DIRECTORY)) ?? []);
-        });
-
         return response;
     }
 
@@ -78,13 +96,6 @@ class MusicPlayService {
         }
 
         return response;
-    }
-
-    #getFullPath(coverPath: string, urlPath = apiAppStorageUrl): string {
-        if (coverPath.length > 0) {
-            return `${urlPath}/${coverPath}`;
-        }
-        return '';
     }
 
 }
@@ -153,7 +164,33 @@ class AccountService {
 
 }
 
+class SearchService {
+
+    constructor(private api = new SearchControllerApi(config)) { }
+
+    async getSearch(requestParameters: GetSearchRequest): Promise<SongContainer[]> {
+        const res: SongContainer[] = [];
+        const response = await this.api.getSearch(requestParameters);
+        response.map((r) => {
+            let songContainer = new SongContainer(r, getFullPath(r.coverPath ?? ''), SongContainerTypes.BLANK);
+            switch (r.type.toUpperCase()) {
+                case "ALBUM":
+                    songContainer.typeName = SongContainerTypes.ALBUM;
+                    res.push(songContainer);
+                    break;
+                case "SONG":
+                    songContainer.typeName = SongContainerTypes.SONG;
+                    res.push(songContainer);
+                    break;
+            }
+            console.log(songContainer);
+        });
+        return res;
+    }
+
+}
+
 export const musicPlayService = new MusicPlayService();
 export const accountService = new AccountService();
+export const searchService = new SearchService();
 export const playerService = new Player();
-export const navigatorService = new Navigator();
