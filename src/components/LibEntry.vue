@@ -1,16 +1,19 @@
 <script setup lang="ts">
 import type { AlbumDto, SongDto } from '@/scripts/api';
 import { SongContainer, SongContainerTypes } from '@/scripts/shared';
+import { CirclePlus } from '@lucide/vue';
 import { useCountdown } from '@vueuse/core';
 import { ref, watch } from 'vue';
 
 const props = defineProps<{
     songContainer: SongContainer
     isSearchResult?: boolean
+    isSearchResultAddSong?: boolean
 }>();
 
 const emit = defineEmits({
     entrySelected(e: SongContainer) { },
+    addSongToPlaylist(s: SongContainer) { },
 });
 
 // NOTICE: used for creating playlists where the image isn't instantly available.
@@ -41,7 +44,12 @@ function onErrorLoadingImg() {
                     {{ (songContainer.type as SongDto).artistName }}
                 </span>
             </div>
-            <span class="capitalize">{{ songContainer.typeName }}</span>
+
+            <button v-if="isSearchResultAddSong" class="btn btn-circle btn neutral"
+                @click="$emit('addSongToPlaylist', songContainer)">
+                <CirclePlus />
+            </button>
+            <span v-else class="capitalize">{{ songContainer.typeName }}</span>
         </figcaption>
 
         <figcaption v-else class="flex flex-col grow">

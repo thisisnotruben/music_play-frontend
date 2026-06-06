@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import { SongDtoFromJSON, type AlbumDto, type PlaylistDto } from '@/scripts/api';
+import { type AlbumDto, type PlaylistDto, type SongDto } from '@/scripts/api';
 import { formatPlaybackTime } from '@/scripts/helper';
 import { musicPlayService, playerService } from '@/scripts/service';
 import { BLANK_SONG_CONTAINER, SongContainer, SongContainerTypes } from '@/scripts/shared';
-import { CirclePlus, CircleX, Clock, DiscAlbum, FolderPen, FolderX, Funnel, Hash, Pause, Play, Shuffle } from '@lucide/vue';
+import { CircleMinus, CirclePlus, CircleX, Clock, DiscAlbum, FolderPen, FolderX, Funnel, Hash, Pause, Play, Shuffle } from '@lucide/vue';
 import { computed, ref, watch } from 'vue';
 import CreateEditPlaylistDialog from '../CreateEditPlaylistDialog.vue';
+import SearchDialog from '../SearchDialog.vue';
 
 const props = defineProps<{
     songContainer: SongContainer
@@ -31,7 +32,6 @@ watch(props, (v) => focusedPlaylist.value = v.songContainer);
 const focusedCoverPath = computed(() => { return focusedPlaylist.value.coverPath; });
 
 const focusedTitle = computed(() => {
-    console.log("title changed");
     let title = '';
     switch (focusedPlaylist.value.typeName) {
         case SongContainerTypes.ALBUM:
@@ -41,7 +41,6 @@ const focusedTitle = computed(() => {
             title = focusedPlaylist.value.type.name ?? '';
             break;
     }
-    console.log(title);
     return title;
 });
 
@@ -65,6 +64,22 @@ function editPlaylist(p: SongContainer) {
     focusedPlaylist.value = p;
     emit('onPlaylistEdited', p);
 }
+
+function addSongToPlaylist(s: SongContainer) {
+    if (focusedPlaylist.value.typeName == SongContainerTypes.PLAYLIST) {
+        musicPlayService.addSongToPlaylist(
+            { playlistId: focusedPlaylist.value.type.id as number, songId: s.type.id as number });
+        (focusedPlaylist.value.type as PlaylistDto).songs?.push(s.type);
+    }
+}
+
+function deleteSongFromPlaylist(songDto: SongDto) {
+    if (focusedPlaylist.value.typeName == SongContainerTypes.PLAYLIST) {
+        musicPlayService.deleteSongFromPlaylist(
+            { playlistId: focusedPlaylist.value.type.id as number, songId: songDto.id as number });
+        (focusedPlaylist.value.type as PlaylistDto).songs = (focusedPlaylist.value.type as PlaylistDto).songs?.filter((s) => s.id != songDto.id);
+    }
+}
 </script>
 
 <template>
@@ -86,8 +101,6 @@ function editPlaylist(p: SongContainer) {
         <div class="flex justify-between">
 
             <div class="flex items-center   gap-2">
-
-
                 <button class="btn btn-circle btn-xl btn-primary"
                     @click="togglePlaySongContainer = !togglePlaySongContainer">
                     <label class="swap">
@@ -96,25 +109,21 @@ function editPlaylist(p: SongContainer) {
                         <Play class="swap-off" />
                     </label>
                 </button>
-
                 <button class="btn btn-circle btn-neutral" @click="playerService.toggleShuffle()">
                     <Shuffle />
                 </button>
-
                 <button class="btn btn-circle btn-neutral">
                     <Funnel />
                 </button>
             </div>
 
             <div v-show="songContainer.typeName === SongContainerTypes.PLAYLIST" class="flex gap-2">
-                <button class="btn btn-circle btn-neutral">
+                <button class="btn btn-circle btn-neutral" onclick="song_list_add_song_dialog.showModal()">
                     <CirclePlus />
                 </button>
-
                 <button class="btn btn-circle btn-neutral" onclick="song_list_edit_playlist_dialog.showModal()">
                     <FolderPen />
                 </button>
-
                 <button class="btn btn-circle btn-neutral" onclick="song_list_dialog.showModal()">
                     <FolderX />
                 </button>
@@ -150,7 +159,7 @@ function editPlaylist(p: SongContainer) {
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="songData in songContainer.type.songs" class="hover:bg-base-300">
+                <tr v-for="songData in (focusedPlaylist.type.songs as SongDto[])" class="hover:bg-base-300">
 
                     <td>
                         <button class="btn btn-circle btn-ghost"
@@ -166,6 +175,11 @@ function editPlaylist(p: SongContainer) {
                     <td>{{ songData.name }}</td>
                     <td>{{ songData.albumName }}</td>
                     <td>{{ formatPlaybackTime(songData.length ?? 0) }}</td>
+                    <td>
+                        <button class="btn btn-circle btn-ghost" @click="deleteSongFromPlaylist(songData)">
+                            <CircleMinus />
+                        </button>
+                    </td>
                 </tr>
             </tbody>
         </table>
@@ -201,5 +215,9 @@ function editPlaylist(p: SongContainer) {
     <CreateEditPlaylistDialog id="song_list_edit_playlist_dialog" type="edit" :playlist-to-edit="songContainer"
         @on-playlist-edited="(e) => editPlaylist(e)">
     </CreateEditPlaylistDialog>
+
+    <SearchDialog id="song_list_add_song_dialog" :only-songs="true" :can-keyboard-shortcut="false"
+        @add-song-to-playlist="(s) => addSongToPlaylist(s)">
+    </SearchDialog>
 
 </template>

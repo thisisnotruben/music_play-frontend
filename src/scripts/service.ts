@@ -183,7 +183,6 @@ class SearchService {
                     res.push(songContainer);
                     break;
             }
-            console.log(songContainer);
         });
         return res;
     }

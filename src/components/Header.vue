@@ -1,12 +1,9 @@
 <script setup lang="ts">
-import type { SongDto } from '@/scripts/api/index.ts';
-import { musicPlayService, searchService } from '@/scripts/service.ts';
-import { SongContainer, SongContainerTypes, type SelectEntrySignalDto } from '@/scripts/shared';
-import { ArrowBigDownDash, AudioWaveform, House, Info, Keyboard, LogOut, Search, SquareUser, User, X } from '@lucide/vue';
-import { useKeyModifier, useMagicKeys, watchDebounced } from '@vueuse/core';
-import { inject, ref, useTemplateRef, watch, watchEffect } from 'vue';
+import { type SelectEntrySignalDto } from '@/scripts/shared';
+import { ArrowBigDownDash, AudioWaveform, House, Info, Keyboard, LogOut, Search, SquareUser, User } from '@lucide/vue';
+import { inject } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import LibEntry from './LibEntry.vue';
+import SearchDialog from './SearchDialog.vue';
 
 const appName = inject('appName');
 
@@ -20,48 +17,6 @@ const isLogined = !['index', 'login', 'createAccount'].includes(route.name?.toSt
 
 function logout() {
     router.push({ name: 'login' });
-}
-
-const ctrlMod = useKeyModifier('Control');
-const { k, escape } = useMagicKeys();
-const showPopupSearch = ref(false);
-const popupSeachEntry = useTemplateRef('popup-seach-entry');
-watchEffect(() => {
-    if (ctrlMod.value && k?.value) {
-        showPopupSearch.value = true;
-        popupSeachEntry.value?.focus();
-    } else if (escape?.value) {
-        showPopupSearch.value = false;
-    }
-});
-
-document.onkeydown = function (e: KeyboardEvent) {
-    if (e.ctrlKey && e.key.toLowerCase() === 'k') {
-        e.preventDefault();
-    }
-};
-
-const searchText = ref('');
-const searchFilters = ref<string[]>([]);
-const searchResults = ref<SongContainer[]>([]);
-async function search() {
-    searchResults.value = await searchService.getSearch({ query: searchText.value, filter: searchFilters.value });
-}
-watchDebounced(searchText, () => search(), { debounce: 500, maxWait: 1000 });
-watch(searchFilters, () => search());
-
-async function onEntryResultSelected(e: SongContainer) {
-    showPopupSearch.value = false;
-    let selection: SelectEntrySignalDto = { entry: e, songIdFocus: -1 }
-
-    if (e.typeName == SongContainerTypes.SONG) {
-        const song = e.type as SongDto;
-        selection = {
-            entry: await musicPlayService.getAlbum({ albumId: song.albumId as number }),
-            songIdFocus: song.id as number
-        }
-    }
-    emit('entrySelected', selection);
 }
 </script>
 
@@ -84,7 +39,7 @@ async function onEntryResultSelected(e: SongContainer) {
                     <input type="text" placeholder="What do you want to play?" class="w-64" />
                     <span class="flex items-center gap-2 text-sm">
                         Ctrl-K
-                        <button class="btn btn-circle btn-ghost btn-sm" @click="showPopupSearch = true">
+                        <button class="btn btn-circle btn-ghost btn-sm" onclick="header_search_dialog.showModal()">
                             <Keyboard />
                         </button>
                     </span>
@@ -131,36 +86,6 @@ async function onEntryResultSelected(e: SongContainer) {
 
     </header>
 
-    <dialog id="search_model" class="modal" :class="{ 'modal-open': showPopupSearch }">
-        <div class="modal-box w-192 bg-base-300 text-base-content flex flex-col gap-2">
-
-            <label class="input w-full">
-                <Search />
-                <input type="text" placeholder="What do you want to play?" v-model="searchText"
-                    ref="popup-seach-entry" />
-            </label>
-
-            <form class="flex justify-end gap-1">
-                <input class="btn btn-base" type="checkbox" aria-label="Album" value="album" v-model="searchFilters" />
-                <input class="btn btn-base" type="checkbox" aria-label="Song" value="song" v-model="searchFilters" />
-                <button class="btn btn-base" type="reset" @click="searchFilters = []">
-                    <X />
-                </button>
-            </form>
-            <div class="divider"></div>
-            <ul class="menu w-full">
-                <li v-for="value in searchResults" :key="value.type.id">
-                    <LibEntry :song-container="value" :is-search-result="true"
-                        @entry-selected="(e) => onEntryResultSelected(e)"></LibEntry>
-                </li>
-            </ul>
-
-        </div>
-        <form method="dialog" class="modal-backdrop">
-
-        </form>
-    </dialog>
-
     <dialog id="logout_model" class="modal">
         <div class="modal-box w-80 bg-base-300 text-base-content">
             <h3 class="text-center underline underline-offset-8 text-lg">
@@ -178,5 +103,9 @@ async function onEntryResultSelected(e: SongContainer) {
             </form>
         </div>
     </dialog>
+
+    <SearchDialog id="header_search_dialog" :only-songs="false" :can-keyboard-shortcut="true"
+        @entry-selected="(e) => $emit('entrySelected', e)">
+    </SearchDialog>
 
 </template>
