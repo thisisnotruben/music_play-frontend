@@ -28,8 +28,33 @@ async function search() {
 watchDebounced(searchText, () => search(), { debounce: 500, maxWait: 1000 });
 watch(searchFilters, () => search());
 
+const ctrlMod = useKeyModifier('Control');
+const { k, escape } = useMagicKeys();
+const popupSeachEntry = useTemplateRef('popup-seach-entry');
+watchEffect(() => {
+    if (!props.canKeyboardShortcut) {
+        return;
+    }
+    if (ctrlMod.value && k?.value) {
+        dialogVisibility(true);
+        popupSeachEntry.value?.focus();
+    } else if (escape?.value) {
+        dialogVisibility(false);
+    }
+});
+
+document.onkeydown = function (e: KeyboardEvent) {
+    if (props.canKeyboardShortcut && e.ctrlKey && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+    }
+};
+
 async function onEntryResultSelected(e: SongContainer) {
-    showPopupSearch.value = false;
+    if (props.onlySongs) {
+        return;
+    }
+
+    dialogVisibility(false);
     let selection: SelectEntrySignalDto = { entry: e, songIdFocus: -1 }
 
     if (e.typeName == SongContainerTypes.SONG) {
@@ -42,31 +67,19 @@ async function onEntryResultSelected(e: SongContainer) {
     emit('entrySelected', selection);
 }
 
-const ctrlMod = useKeyModifier('Control');
-const { k, escape } = useMagicKeys();
-const showPopupSearch = ref(false);
-const popupSeachEntry = useTemplateRef('popup-seach-entry');
-watchEffect(() => {
-    if (!props.canKeyboardShortcut) {
-        return;
-    }
-    if (ctrlMod.value && k?.value) {
-        showPopupSearch.value = true;
-        popupSeachEntry.value?.focus();
-    } else if (escape?.value) {
-        showPopupSearch.value = false;
-    }
-});
+function dialogVisibility(show: boolean) {
+    const method = show ? 'showModal();' : 'close();';
+    eval(`document.querySelector('#${props.id}').${method}`);
+}
 
-document.onkeydown = function (e: KeyboardEvent) {
-    if (props.canKeyboardShortcut && e.ctrlKey && e.key.toLowerCase() === 'k') {
-        e.preventDefault();
-    }
-};
+function addSongToPlaylist(e: SongContainer) {
+    dialogVisibility(false);
+    emit('addSongToPlaylist', e);
+}
 </script>
 
 <template>
-    <dialog :id="id" class="modal" :class="{ 'modal-open': showPopupSearch }">
+    <dialog :id="id" class="modal">
         <div class="modal-box w-192 bg-base-300 text-base-content flex flex-col gap-2">
 
             <label class="input w-full">
@@ -89,7 +102,7 @@ document.onkeydown = function (e: KeyboardEvent) {
                 <li v-for="value in searchResults" :key="value.type.id">
                     <LibEntry :song-container="value" :is-search-result="true" :is-search-result-add-song="onlySongs"
                         @entry-selected="(e) => onEntryResultSelected(e)"
-                        @add-song-to-playlist="(e) => $emit('addSongToPlaylist', e)"></LibEntry>
+                        @add-song-to-playlist="(e) => addSongToPlaylist(e)"></LibEntry>
                 </li>
             </ul>
 
