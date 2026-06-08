@@ -31,19 +31,20 @@ function logout() {
         <template v-if="isLogined">
 
             <div class="navbar-center gap-2">
+
                 <button class="btn btn-circle" @click="$router.push({ name: 'home' })">
                     <House />
                 </button>
-                <label class="input">
+
+                <button class="btn" onclick="header_search_dialog.showModal()"">
                     <Search />
-                    <input type="text" placeholder="What do you want to play?" class="w-64" />
-                    <span class="flex items-center gap-2 text-sm">
-                        Ctrl-K
-                        <button class="btn btn-circle btn-ghost btn-sm" onclick="header_search_dialog.showModal()">
-                            <Keyboard />
-                        </button>
+                    What do you want to play? &nbsp;&nbsp;&nbsp;&nbsp;
+                    <span class=" flex items-center gap-2 text-sm">
+                    <Keyboard />
+                    Ctrl-K
                     </span>
-                </label>
+                </button>
+
             </div>
 
             <div class="navbar-end">
