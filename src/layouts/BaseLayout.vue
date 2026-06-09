@@ -1,10 +1,9 @@
 <script setup lang="ts">
-import Footer from '@/components/Footer.vue';
 import Header from '@/components/Header.vue';
-import { BLANK_SONG_CONTAINER, type SelectEntrySignalDto } from '@/scripts/shared';
+import { BLANK_SONG, BLANK_SONG_CONTAINER, type SelectEntrySignalDto } from '@/scripts/shared';
 import { provide, ref } from 'vue';
 
-const searchEntrySelected = ref<SelectEntrySignalDto>({ entry: BLANK_SONG_CONTAINER, songIdFocus: -1 });
+const searchEntrySelected = ref<SelectEntrySignalDto>({ entry: BLANK_SONG_CONTAINER, songFocus: BLANK_SONG });
 provide('searchResultSelected', searchEntrySelected);
 provide('appName', 'Music Play');
 </script>
@@ -15,7 +14,6 @@ provide('appName', 'Music Play');
         <main class="grow">
             <slot></slot>
         </main>
-        <Footer></Footer>
     </div>
 </template>
 

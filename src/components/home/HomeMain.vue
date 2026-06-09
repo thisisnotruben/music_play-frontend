@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { BLANK_SONG_CONTAINER, SongContainer, type SelectEntrySignalDto } from '@/scripts/shared';
+import { playerService } from '@/scripts/service.ts';
+import { BLANK_SONG, BLANK_SONG_CONTAINER, SongContainer, type SelectEntrySignalDto } from '@/scripts/shared';
 import { Folder, FolderOpen, Telescope } from '@lucide/vue';
 import { inject, ref, Suspense, useTemplateRef, watch } from 'vue';
 import HomeMainTabSection from './HomeMainTabSection.vue';
@@ -33,10 +34,12 @@ function onPlaylistDeletedReceived(p: SongContainer) {
     emit('onPlaylistDeleted', p);
 }
 
-const searchSelected = inject('searchResultSelected', ref<SelectEntrySignalDto>({ entry: BLANK_SONG_CONTAINER, songIdFocus: -1 }));
-watch(searchSelected, (value) => {
+const searchSelected = inject('searchResultSelected', ref<SelectEntrySignalDto>({ entry: BLANK_SONG_CONTAINER, songFocus: BLANK_SONG }));
+watch(searchSelected, async (value) => {
     setEntry(value.entry);
-    // TODO: focus on song and play
+    if (value.songFocus != BLANK_SONG) {
+        await playerService.play(value.songFocus, value.entry);
+    }
 });
 
 defineExpose({ setEntry });

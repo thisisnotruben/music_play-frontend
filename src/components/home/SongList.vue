@@ -2,7 +2,7 @@
 import { type AlbumDto, type PlaylistDto, type SongDto } from '@/scripts/api';
 import { formatPlaybackTime } from '@/scripts/helper';
 import { musicPlayService, playerService } from '@/scripts/service';
-import { BLANK_SONG_CONTAINER, SongContainer, SongContainerTypes } from '@/scripts/shared';
+import { BLANK_SONG, BLANK_SONG_CONTAINER, SongContainer, SongContainerTypes } from '@/scripts/shared';
 import { CircleMinus, CirclePlus, CircleX, Clock, DiscAlbum, FolderPen, FolderX, Funnel, Hash, Pause, Play, Shuffle } from '@lucide/vue';
 import { computed, ref, watch } from 'vue';
 import CreateEditPlaylistDialog from '../CreateEditPlaylistDialog.vue';
@@ -17,14 +17,36 @@ const emit = defineEmits({
     onPlaylistEdited(p: SongContainer) { },
 });
 
-const togglePlaySongContainer = ref(false);
-watch(togglePlaySongContainer, () => {
-    if (togglePlaySongContainer.value) {
-        playerService.resume();
-    } else {
-        playerService.pause();
+const audioPlayer = ref(playerService.player);
+const focusedSong = ref(BLANK_SONG);
+const isPlaying = ref(false);
+
+audioPlayer.value?.addEventListener('play', () => isPlaying.value = true);
+audioPlayer.value?.addEventListener('pause', () => isPlaying.value = false);
+document.addEventListener('songPlayed', (ev: CustomEventInit<SongDto>) => {
+    if (ev.detail && ev.detail != BLANK_SONG) {
+        focusedSong.value = ev.detail;
     }
 });
+
+function togglePlay() {
+    if (isPlaying.value) {
+        audioPlayer.value?.pause();
+    } else {
+        audioPlayer.value?.play();
+    }
+}
+
+async function toggleEntry(song: SongDto) {
+    // audioPlayer.value?.pause();
+    await playerService.play(song, focusedPlaylist.value);
+    // if (isPlaying.value) {
+    // if (isPlaying.value && focusedSong.value != BLANK_SONG && song != focusedSong.value) {
+    //     audioPlayer.value?.pause();
+    // } else {
+    //     audioPlayer.value?.pause();
+    // }
+}
 
 const focusedPlaylist = ref(BLANK_SONG_CONTAINER);
 watch(props, (v) => focusedPlaylist.value = v.songContainer);
@@ -101,13 +123,9 @@ function deleteSongFromPlaylist(songDto: SongDto) {
         <div class="flex justify-between">
 
             <div class="flex items-center   gap-2">
-                <button class="btn btn-circle btn-xl btn-primary"
-                    @click="togglePlaySongContainer = !togglePlaySongContainer">
-                    <label class="swap">
-                        <input type="checkbox" />
-                        <Pause class="swap-on" />
-                        <Play class="swap-off" />
-                    </label>
+                <button class="btn btn-circle btn-xl btn-primary" @click="togglePlay()">
+                    <Pause v-show="isPlaying" />
+                    <Play v-show="!isPlaying" />
                 </button>
                 <button class="btn btn-circle btn-neutral" @click="playerService.toggleShuffle()">
                     <Shuffle />
@@ -160,16 +178,13 @@ function deleteSongFromPlaylist(songDto: SongDto) {
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="songData in (focusedPlaylist.type.songs as SongDto[])" class="hover:bg-base-300">
+                <tr v-for="songData in ((focusedPlaylist.type as PlaylistDto | AlbumDto).songs as SongDto[])"
+                    class="hover:bg-base-300" :class="{ 'bg-base-300': songData == focusedSong }">
 
                     <td>
-                        <button class="btn btn-circle btn-ghost"
-                            @click="playerService.play(new SongContainer(songData, songContainer.coverPath, songContainer.typeName))">
-                            <label class="swap">
-                                <input type="checkbox" />
-                                <Pause class="swap-on" />
-                                <Play class="swap-off" />
-                            </label>
+                        <button class="btn btn-circle btn-ghost" @click="toggleEntry(songData)">
+                            <Pause v-show="songData == focusedSong" />
+                            <Play v-show="songData != focusedSong && focusedSong != BLANK_SONG" />
                         </button>
                     </td>
 

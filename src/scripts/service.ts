@@ -2,14 +2,14 @@ import { AccountControllerApi, Configuration, MusicPlayControllerApi, SearchCont
 import { BLANK_SONG_CONTAINER, Player, SongContainer, SongContainerTypes } from './shared';
 
 
-const apiAppStorageUrl: string = import.meta.env.VITE_API_APP_STORAGE_URL;
+const apiAppCoverStorageUrl: string = import.meta.env.VITE_API_APP_COVER_STORAGE_URL;
+const apiAppAudioStorageUrl: string = import.meta.env.VITE_API_APP_AUDIO_STORAGE_URL;
 const apiUserStorageUrl: string = import.meta.env.VITE_API_USER_STORAGE_URL;
 const config = new Configuration({
     basePath: import.meta.env.VITE_API_URL,
 });
 
-
-function getFullPath(coverPath: string, urlPath = apiAppStorageUrl): string {
+export function getFullPath(coverPath: string, urlPath = apiAppCoverStorageUrl): string {
     return coverPath.length > 0 ? `${urlPath}/${coverPath}` : '';
 }
 
@@ -196,4 +196,4 @@ class SearchService {
 export const musicPlayService = new MusicPlayService();
 export const accountService = new AccountService();
 export const searchService = new SearchService();
-export const playerService = new Player();
+export const playerService = new Player(apiAppAudioStorageUrl);

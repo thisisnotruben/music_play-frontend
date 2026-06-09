@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { SongDto } from '@/scripts/api/index.ts';
 import { musicPlayService, searchService } from '@/scripts/service';
-import { SongContainerTypes, type SelectEntrySignalDto, type SongContainer } from '@/scripts/shared';
+import { BLANK_SONG, SongContainerTypes, type SelectEntrySignalDto, type SongContainer } from '@/scripts/shared';
 import { Search, X } from '@lucide/vue';
 import { useKeyModifier, useMagicKeys, watchDebounced } from '@vueuse/core';
 import { ref, useTemplateRef, watch, watchEffect } from 'vue';
@@ -55,13 +55,13 @@ async function onEntryResultSelected(e: SongContainer) {
     }
 
     dialogVisibility(false);
-    let selection: SelectEntrySignalDto = { entry: e, songIdFocus: -1 }
+    let selection: SelectEntrySignalDto = { entry: e, songFocus: BLANK_SONG }
 
     if (e.typeName == SongContainerTypes.SONG) {
         const song = e.type as SongDto;
         selection = {
             entry: await musicPlayService.getAlbum({ albumId: song.albumId as number }),
-            songIdFocus: song.id as number
+            songFocus: song
         }
     }
     emit('entrySelected', selection);
