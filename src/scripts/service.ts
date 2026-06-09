@@ -1,4 +1,4 @@
-import { AccountControllerApi, Configuration, MusicPlayControllerApi, SearchControllerApi, type AddSongToPlaylistRequest, type CreateAccountRequest, type CreatePlaylistRequest, type DeletePlaylistRequest, type DeleteSongFromPlaylistRequest, type EditEmailRequest, type EditFirstNameRequest, type EditLastNameRequest, type EditPasswordRequest, type EditPLaylistRequest, type EditUsernameRequest, type GetAlbumRequest, type GetSearchRequest, type LoginRequest } from './api/index';
+import { AccountControllerApi, Configuration, MusicPlayControllerApi, SearchControllerApi, type AddSongToPlaylistRequest, type AppUserDto, type CreateAccountRequest, type CreatePlaylistRequest, type DeletePlaylistRequest, type DeleteSongFromPlaylistRequest, type EditEmailRequest, type EditFirstNameRequest, type EditLastNameRequest, type EditPasswordRequest, type EditPLaylistRequest, type EditUsernameRequest, type GetAlbumRequest, type GetSearchRequest, type LoginRequest } from './api/index';
 import { BLANK_SONG_CONTAINER, Player, SongContainer, SongContainerTypes } from './shared';
 
 
@@ -125,6 +125,10 @@ class AccountService {
         finally {
             return isAccountCreated
         }
+    }
+
+    async getAccountInfo(): Promise<AppUserDto> {
+        return await this.api.getAccountInfo();
     }
 
     async login(requestParameters: LoginRequest): Promise<boolean> {

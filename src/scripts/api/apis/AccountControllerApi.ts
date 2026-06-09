@@ -19,6 +19,11 @@ import {
     AccountCreateDtoToJSON,
 } from '../models/AccountCreateDto';
 import {
+    type AppUserDto,
+    AppUserDtoFromJSON,
+    AppUserDtoToJSON,
+} from '../models/AppUserDto';
+import {
     type ErrorResponseDto,
     ErrorResponseDtoFromJSON,
     ErrorResponseDtoToJSON,
@@ -342,6 +347,43 @@ export class AccountControllerApi extends runtime.BaseAPI {
      */
     async editUsername(requestParameters: EditUsernameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.editUsernameRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * Creates request options for getAccountInfo without sending the request
+     */
+    async getAccountInfoRequestOpts(): Promise<runtime.RequestOpts> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+
+        let urlPath = `/api/v1/account/getAccountInfo`;
+
+        return {
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        };
+    }
+
+    /**
+     * Get account info
+     */
+    async getAccountInfoRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppUserDto>> {
+        const requestOptions = await this.getAccountInfoRequestOpts();
+        const response = await this.request(requestOptions, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => AppUserDtoFromJSON(jsonValue));
+    }
+
+    /**
+     * Get account info
+     */
+    async getAccountInfo(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppUserDto> {
+        const response = await this.getAccountInfoRaw(initOverrides);
+        return await response.value();
     }
 
     /**

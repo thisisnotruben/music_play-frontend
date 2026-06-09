@@ -10,6 +10,7 @@ All URIs are relative to *http://localhost:8080*
 | [**editLastName**](AccountControllerApi.md#editlastname) | **PATCH** /api/v1/account/edit/lastName | Edit last name |
 | [**editPassword**](AccountControllerApi.md#editpassword) | **PATCH** /api/v1/account/edit/password | Edit password |
 | [**editUsername**](AccountControllerApi.md#editusername) | **PATCH** /api/v1/account/edit/username | Edit username |
+| [**getAccountInfo**](AccountControllerApi.md#getaccountinfo) | **GET** /api/v1/account/getAccountInfo | Get account info |
 | [**login**](AccountControllerApi.md#login) | **POST** /api/v1/account/login | Login to an account |
 
 
@@ -412,6 +413,65 @@ No authorization required
 | **404** | User not found |  -  |
 | **400** | Bad Request |  -  |
 | **200** | Ok |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
+
+
+## getAccountInfo
+
+> AppUserDto getAccountInfo()
+
+Get account info
+
+### Example
+
+```ts
+import {
+  Configuration,
+  AccountControllerApi,
+} from '';
+import type { GetAccountInfoRequest } from '';
+
+async function example() {
+  console.log("🚀 Testing  SDK...");
+  const api = new AccountControllerApi();
+
+  try {
+    const data = await api.getAccountInfo();
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// Run the test
+example().catch(console.error);
+```
+
+### Parameters
+
+This endpoint does not need any parameter.
+
+### Return type
+
+[**AppUserDto**](AppUserDto.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: `*/*`, `application/json`
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **404** | Not Found |  -  |
+| **400** | Bad Request |  -  |
+| **200** | OK |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 

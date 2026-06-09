@@ -13,6 +13,10 @@ const props = defineProps<{
     type: string
 }>();
 
+const emit = defineEmits({
+    fieldChanged(v: string) { },
+});
+
 const field = ref('');
 function fieldSubmitted() {
     switch (props.type) {
@@ -31,7 +35,11 @@ function fieldSubmitted() {
         case "lastName":
             accountService.editLastName({ lastName: field.value });
             break;
+        default:
+            return;
     }
+    eval(`document.querySelector('#${props.id}').close();`);
+    emit('fieldChanged', field.value);
 }
 
 const formId = props.id.concat('-form');
@@ -50,31 +58,17 @@ const confirmTextView = ref(false);
             </h4>
             <div class="divider "></div>
 
-            <div class="dialog-key-value">
+            <div v-if="type !== 'password'" class="dialog-key-value">
                 <span>{{ bodyKey }}:</span>
-                <span>
-                    <template v-if="type === 'password'">
-                        <label class="swap">
-                            <input type="checkbox" />
-                            <span class="swap-on flex gap-2">
-                                <EyeClosed />
-                                {{ bodyValue }}
-                            </span>
-                            <span class="swap-off flex gap-2">
-                                <Eye />
-                                {{ '*'.repeat(bodyValue.length) }}
-                            </span>
-                        </label>
-                    </template>
-                    <template v-else>
-                        {{ bodyValue }}
-                    </template>
-                </span>
+                <span class="break-all">{{ bodyValue }}</span>
             </div>
 
             <form class="mt-6 dialog-form" :id="formId" @submit.prevent>
 
                 <template v-if="type === 'password'">
+
+                    <!-- TODO: enter current password -->
+
                     <label class="input validator">
                         <KeyRound />
                         <input :type="textView ? 'text' : 'password'" minlength="8" maxlength="24" v-model="field"

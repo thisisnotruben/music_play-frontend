@@ -2,6 +2,7 @@
 /* eslint-disable */
 export * from './AccountCreateDto';
 export * from './AlbumDto';
+export * from './AppUserDto';
 export * from './ArtistDto';
 export * from './ErrorResponseDto';
 export * from './ExploreEntryDto';

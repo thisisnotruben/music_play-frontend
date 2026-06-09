@@ -5,6 +5,7 @@ apis/index.ts
 docs/AccountControllerApi.md
 docs/AccountCreateDto.md
 docs/AlbumDto.md
+docs/AppUserDto.md
 docs/ArtistDto.md
 docs/ErrorResponseDto.md
 docs/ExploreEntryDto.md
@@ -16,6 +17,7 @@ docs/SongDto.md
 index.ts
 models/AccountCreateDto.ts
 models/AlbumDto.ts
+models/AppUserDto.ts
 models/ArtistDto.ts
 models/ErrorResponseDto.ts
 models/ExploreEntryDto.ts
