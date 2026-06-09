@@ -17,39 +17,46 @@ const emit = defineEmits({
     onPlaylistEdited(p: SongContainer) { },
 });
 
-const audioPlayer = ref(playerService.player);
+let audioPlayer = ref(playerService.player);
 const focusedSong = ref(BLANK_SONG);
 const isPlaying = ref(false);
+const focusedPlaylist = ref(BLANK_SONG_CONTAINER);
 
-audioPlayer.value?.addEventListener('play', () => isPlaying.value = true);
-audioPlayer.value?.addEventListener('pause', () => isPlaying.value = false);
+document.addEventListener('playerSet', (ev: CustomEventInit<HTMLMediaElement>) => {
+    if (ev.detail) {
+        audioPlayer.value = ev.detail;
+        ev.detail.addEventListener('play', () => isPlaying.value = true);
+        ev.detail.addEventListener('pause', () => isPlaying.value = false);
+    }
+});
+
 document.addEventListener('songPlayed', (ev: CustomEventInit<SongDto>) => {
     if (ev.detail && ev.detail != BLANK_SONG) {
         focusedSong.value = ev.detail;
     }
 });
 
+watch(props, (v) => {
+    focusedPlaylist.value = v.songContainer;
+    focusedSong.value = BLANK_SONG;
+    playerService.reset();
+});
+
 function togglePlay() {
-    if (isPlaying.value) {
-        audioPlayer.value?.pause();
-    } else {
-        audioPlayer.value?.play();
-    }
+    playerService.play(focusedSong.value, focusedPlaylist.value);
 }
 
 async function toggleEntry(song: SongDto) {
-    // audioPlayer.value?.pause();
-    await playerService.play(song, focusedPlaylist.value);
-    // if (isPlaying.value) {
-    // if (isPlaying.value && focusedSong.value != BLANK_SONG && song != focusedSong.value) {
-    //     audioPlayer.value?.pause();
-    // } else {
-    //     audioPlayer.value?.pause();
-    // }
+    if (focusedSong.value.id != song.id || audioPlayer.value?.ended) {
+        await playerService.play(song, focusedPlaylist.value);
+    } else {
+        if (audioPlayer.value?.paused) {
+            audioPlayer.value?.play();
+        } else {
+            audioPlayer.value?.pause();
+        }
+    }
 }
-
-const focusedPlaylist = ref(BLANK_SONG_CONTAINER);
-watch(props, (v) => focusedPlaylist.value = v.songContainer);
 
 const focusedCoverPath = computed(() => { return focusedPlaylist.value.coverPath; });
 
@@ -127,7 +134,8 @@ function deleteSongFromPlaylist(songDto: SongDto) {
                     <Pause v-show="isPlaying" />
                     <Play v-show="!isPlaying" />
                 </button>
-                <button class="btn btn-circle btn-neutral" @click="playerService.toggleShuffle()">
+                <button class="btn btn-circle" :class="{ 'btn-neutral': playerService.getShuffle() }"
+                    @click="playerService.toggleShuffle()">
                     <Shuffle />
                 </button>
                 <button class="btn btn-circle btn-neutral">
@@ -183,8 +191,8 @@ function deleteSongFromPlaylist(songDto: SongDto) {
 
                     <td>
                         <button class="btn btn-circle btn-ghost" @click="toggleEntry(songData)">
-                            <Pause v-show="songData == focusedSong" />
-                            <Play v-show="songData != focusedSong && focusedSong != BLANK_SONG" />
+                            <Pause v-show="isPlaying && songData == focusedSong" />
+                            <Play v-show="songData != focusedSong || (audioPlayer?.paused)" />
                         </button>
                     </td>
 

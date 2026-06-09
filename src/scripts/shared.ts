@@ -49,11 +49,10 @@ export class Player {
     static loopTypes = [LoopType.ALL, LoopType.SINGULAR, LoopType.OFF];
 
     player: HTMLMediaElement | null = null;
+    source: SongContainer | null = null;
 
-    private source: SongContainer | null = null;
     private songs: SongDto[] = [];
     private currSongIndex = -1;
-
     private loopType = LoopType.OFF;
     private isShuffling = false;
 
@@ -72,16 +71,8 @@ export class Player {
             document.dispatchEvent(
                 new CustomEvent('songPlayed', { detail: BLANK_SONG }))
         );
-    }
 
-    getCoverSrc(): string {
-        return this.getSong()?.coverPath ?? '';
-    }
-
-    getSong(): SongDto | null {
-        return this.currSongIndex == -1
-            ? null
-            : this.songs.at(this.currSongIndex) as SongDto;
+        document.dispatchEvent(new CustomEvent('playerSet', { detail: player }));
     }
 
     setLoopType(loopType: number) {
@@ -120,8 +111,12 @@ export class Player {
                 this.source = source;
                 this.setSongs();
             } else {
-                this.currSongIndex = this.songs.indexOf(song);
+                this.currSongIndex = this.songs.indexOf(song as SongDto);
             }
+        }
+
+        if (song.id == -1 && this.songs.length > 0) {
+            song = this.songs.at(0) as SongDto;
         }
 
         if (song.audioPath && song.audioPath.length > 0) {
@@ -129,6 +124,10 @@ export class Player {
             await this.player.play();
             document.dispatchEvent(new CustomEvent('songPlayed', { detail: song }));
         }
+    }
+
+    reset() {
+        this.currSongIndex = 0;
     }
 
     playPrev() {
