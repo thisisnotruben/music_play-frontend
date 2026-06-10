@@ -89,7 +89,7 @@ defineExpose({ setEntry });
                 <span>{{ entryFocusedLabel }}</span>
             </label>
             <div class="tab-content">
-                <SongList class="h-192" :song-container="entry"
+                <SongList :song-container="entry"
                     @on-playlist-deleted="(p) => onPlaylistDeletedReceived(p)"
                     @on-playlist-edited="(p) => $emit('onPlaylistEdited', p)">
                 </SongList>

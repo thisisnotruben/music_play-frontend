@@ -44,17 +44,32 @@ export const BLANK_SONG: SongDto = {
     albumName: '', albumId: -1, artistName: '',
 }
 
+
+function fisherYatesShuffle(arr: Array<SongDto | undefined>) {
+    for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+}
+
+export interface ShuffleEvent {
+    shuffling: boolean,
+    songs: SongDto[],
+}
+
 export class Player {
 
     static loopTypes = [LoopType.ALL, LoopType.SINGULAR, LoopType.OFF];
 
     player: HTMLMediaElement | null = null;
     source: SongContainer | null = null;
+    isShuffling = false;
 
+    private preShuffledSongs: SongDto[] = [];
     private songs: SongDto[] = [];
     private currSongIndex = -1;
     private loopType = LoopType.OFF;
-    private isShuffling = false;
 
     constructor(private basePath: string) { }
 
@@ -87,18 +102,15 @@ export class Player {
     }
 
     toggleShuffle() {
-        this.isShuffling = !this.isShuffling;
         if (this.isShuffling) {
-            this.setSongs();
+            this.songs = this.preShuffledSongs;
         } else {
-            const arrCopy = [...this.songs];
-            this.shuffle(arrCopy);
-            this.songs = arrCopy;
+            this.songs = fisherYatesShuffle([...this.preShuffledSongs]) as SongDto[];
         }
-    }
+        this.isShuffling = !this.isShuffling;
 
-    getShuffle(): boolean {
-        return this.isShuffling;
+        const payload: ShuffleEvent = { shuffling: this.isShuffling, songs: this.songs, }
+        document.dispatchEvent(new CustomEvent('playerShuffleSet', { detail: payload }));
     }
 
     async play(song: SongDto, source?: SongContainer) {
@@ -128,6 +140,9 @@ export class Player {
 
     reset() {
         this.currSongIndex = 0;
+        if (this.isShuffling) {
+            this.toggleShuffle();
+        }
     }
 
     playPrev() {
@@ -165,23 +180,7 @@ export class Player {
                 this.songs = (this.source.type as PlaylistDto).songs as SongDto[];
                 break;
         }
-    }
-
-    // https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
-    private shuffle(array: Array<SongDto | undefined>) {
-        let currentIndex = array.length;
-
-        // While there remain elements to shuffle...
-        while (currentIndex != 0) {
-
-            // Pick a remaining element...
-            let randomIndex = Math.floor(Math.random() * currentIndex);
-            currentIndex--;
-
-            // And swap it with the current element.
-            [array[currentIndex], array[randomIndex]] = [
-                array[randomIndex], array[currentIndex]];
-        }
+        this.preShuffledSongs = [...this.songs];
     }
 
 }

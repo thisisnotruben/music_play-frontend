@@ -2,25 +2,36 @@
 import type { SongDto } from '@/scripts/api';
 import { formatPlaybackTime } from '@/scripts/helper';
 import { getFullPath, playerService } from '@/scripts/service';
-import { BLANK_SONG, LoopType, Player } from '@/scripts/shared';
+import { BLANK_SONG, LoopType, Player, type ShuffleEvent } from '@/scripts/shared';
 import { Pause, Play, Repeat, Repeat1, RepeatOff, Shuffle, SkipBack, SkipForward, Volume, Volume1, Volume2, VolumeX } from '@lucide/vue';
 import { ref, useTemplateRef, watch } from 'vue';
 
 const audioPlayer = useTemplateRef<HTMLMediaElement>('audio-player');
 const focusedSong = ref(BLANK_SONG);
 const isPlaying = ref(false);
+const isShuffling = ref(playerService.isShuffling);
 
 const progress = ref(0.0);
 watch(audioPlayer, (v) => {
     if (v) {
         playerService.init(v);
-        v.addEventListener('timeupdate', () => progress.value = v.currentTime / v.duration);
+        v.addEventListener('timeupdate', () =>
+            progress.value = Number.isFinite(v.currentTime) && Number.isFinite(v.duration)
+                ? v.currentTime / v.duration
+                : 0.0
+        );
         v.addEventListener('play', () => isPlaying.value = true);
         v.addEventListener('pause', () => isPlaying.value = false);
 
         document.addEventListener('songPlayed', (ev: CustomEventInit<SongDto>) => {
             if (ev.detail && ev.detail != BLANK_SONG) {
                 focusedSong.value = ev.detail;
+            }
+        });
+
+        document.addEventListener('playerShuffleSet', (ev: CustomEventInit<ShuffleEvent>) => {
+            if (ev.detail) {
+                isShuffling.value = ev.detail.shuffling;
             }
         });
     }
@@ -66,7 +77,7 @@ function setLoopType() {
 
         <div class="navbar-center flex flex-col gap-2">
             <div class="flex gap-2 items-center">
-                <button class="btn btn-circle" :class="{ 'btn-neutral': playerService.getShuffle() }"
+                <button class="btn btn-circle" :class="{ 'btn-neutral': isShuffling }"
                     @click="playerService.toggleShuffle()">
                     <Shuffle />
                 </button>

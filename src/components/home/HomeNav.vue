@@ -24,9 +24,12 @@ function deletePlaylist() {
 }
 
 function editPlaylist() {
-    playlists.value = playlists.value
-        .filter((p) => (props.playlistEdited.type as PlaylistDto).id == (p.type as PlaylistDto).id)
-        .map(() => props.playlistEdited);
+    for (let i = 0; i < playlists.value.length; i++) {
+        const element = playlists.value[i];
+        if (element?.type.id == props.playlistEdited.type.id) {
+            playlists.value[i] = props.playlistEdited;
+        }
+    }
 }
 
 watch(props, (v) => {

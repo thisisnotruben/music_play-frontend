@@ -2,8 +2,8 @@
 import { type AlbumDto, type PlaylistDto, type SongDto } from '@/scripts/api';
 import { formatPlaybackTime } from '@/scripts/helper';
 import { musicPlayService, playerService } from '@/scripts/service';
-import { BLANK_SONG, BLANK_SONG_CONTAINER, SongContainer, SongContainerTypes } from '@/scripts/shared';
-import { CircleMinus, CirclePlus, CircleX, Clock, DiscAlbum, FolderPen, FolderX, Funnel, Hash, Pause, Play, Shuffle } from '@lucide/vue';
+import { BLANK_SONG, BLANK_SONG_CONTAINER, SongContainer, SongContainerTypes, type ShuffleEvent } from '@/scripts/shared';
+import { CircleMinus, CirclePlus, CircleX, Clock, DiscAlbum, FolderPen, FolderX, Hash, Pause, Play, Shuffle } from '@lucide/vue';
 import { computed, ref, watch } from 'vue';
 import CreateEditPlaylistDialog from '../CreateEditPlaylistDialog.vue';
 import SearchDialog from '../SearchDialog.vue';
@@ -21,6 +21,7 @@ let audioPlayer = ref(playerService.player);
 const focusedSong = ref(BLANK_SONG);
 const isPlaying = ref(false);
 const focusedPlaylist = ref(BLANK_SONG_CONTAINER);
+const isShuffling = ref(playerService.isShuffling);
 
 document.addEventListener('playerSet', (ev: CustomEventInit<HTMLMediaElement>) => {
     if (ev.detail) {
@@ -36,6 +37,15 @@ document.addEventListener('songPlayed', (ev: CustomEventInit<SongDto>) => {
     }
 });
 
+document.addEventListener('playerShuffleSet', (ev: CustomEventInit<ShuffleEvent>) => {
+    if (ev.detail) {
+        isShuffling.value = ev.detail.shuffling;
+        if (focusedPlaylist.value.type.name == ev.detail.songs.at(0)?.albumName) {
+            (focusedPlaylist.value.type as AlbumDto | PlaylistDto).songs = ev.detail.songs;
+        }
+    }
+});
+
 watch(props, (v) => {
     focusedPlaylist.value = v.songContainer;
     focusedSong.value = BLANK_SONG;
@@ -43,7 +53,11 @@ watch(props, (v) => {
 });
 
 function togglePlay() {
-    playerService.play(focusedSong.value, focusedPlaylist.value);
+    if (isPlaying.value) {
+        audioPlayer.value?.pause();
+    } else {
+        playerService.play(focusedSong.value, focusedPlaylist.value);
+    }
 }
 
 async function toggleEntry(song: SongDto) {
@@ -127,23 +141,20 @@ function deleteSongFromPlaylist(songDto: SongDto) {
             </figcaption>
         </figure>
 
-        <div class="flex justify-between">
+        <div class="flex gap-2">
 
-            <div class="flex items-center   gap-2">
+            <div class="flex items-center gap-2">
                 <button class="btn btn-circle btn-xl btn-primary" @click="togglePlay()">
                     <Pause v-show="isPlaying" />
                     <Play v-show="!isPlaying" />
                 </button>
-                <button class="btn btn-circle" :class="{ 'btn-neutral': playerService.getShuffle() }"
+                <button class="btn btn-circle" :class="{ 'btn-neutral': isShuffling }"
                     @click="playerService.toggleShuffle()">
                     <Shuffle />
                 </button>
-                <button class="btn btn-circle btn-neutral">
-                    <Funnel />
-                </button>
             </div>
 
-            <div v-show="songContainer.typeName === SongContainerTypes.PLAYLIST" class="flex gap-2">
+            <div v-show="songContainer.typeName === SongContainerTypes.PLAYLIST" class="flex items-center gap-2">
                 <button class="btn btn-circle btn-neutral" onclick="song_list_add_song_dialog.showModal()">
                     <CirclePlus />
                 </button>
