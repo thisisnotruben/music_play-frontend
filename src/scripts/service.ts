@@ -1,4 +1,4 @@
-import { AccountControllerApi, Configuration, MusicPlayControllerApi, SearchControllerApi, type AddSongToPlaylistRequest, type AppUserDto, type CreateAccountRequest, type CreatePlaylistRequest, type DeletePlaylistRequest, type DeleteSongFromPlaylistRequest, type EditEmailRequest, type EditFirstNameRequest, type EditLastNameRequest, type EditPasswordRequest, type EditPLaylistRequest, type EditUsernameRequest, type GetAlbumRequest, type GetSearchRequest, type LoginRequest } from './api/index';
+import { AccountControllerApi, Configuration, MusicPlayControllerApi, SearchControllerApi, type AddSongToPlaylistRequest, type AlbumDto, type AppUserDto, type CreateAccountRequest, type CreatePlaylistRequest, type DeletePlaylistRequest, type DeleteSongFromPlaylistRequest, type EditEmailRequest, type EditFirstNameRequest, type EditLastNameRequest, type EditPasswordRequest, type EditPLaylistRequest, type EditUsernameRequest, type GetAlbumRequest, type GetSearchRequest, type LoginRequest, type PlaylistDto, type SongDto } from './api/index';
 import { BLANK_SONG_CONTAINER, Player, SongContainer, SongContainerTypes } from './shared';
 
 
@@ -175,9 +175,9 @@ class SearchService {
     async getSearch(requestParameters: GetSearchRequest): Promise<SongContainer[]> {
         const res: SongContainer[] = [];
         const response = await this.api.getSearch(requestParameters);
-        response.map((r) => {
+        response.map((r: AlbumDto | SongDto) => {
             let songContainer = new SongContainer(r, getFullPath(r.coverPath ?? ''), SongContainerTypes.BLANK);
-            switch (r.type.toUpperCase()) {
+            switch (r?.type?.toUpperCase()) {
                 case "ALBUM":
                     songContainer.typeName = SongContainerTypes.ALBUM;
                     res.push(songContainer);
