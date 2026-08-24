@@ -1,11 +1,7 @@
 <script setup lang="ts">
 import BaseLayout from '@/layouts/BaseLayout.vue';
-import { accountService } from '@/scripts/service';
 import { Ban, Check, CircleArrowLeft, Eye, EyeClosed, KeyRound, Mail, User, UserPlus } from '@lucide/vue';
 import { ref } from 'vue';
-import { useRouter } from 'vue-router';
-
-const router = useRouter();
 
 const textView = ref(false);
 const confirmTextView = ref(false);
@@ -18,28 +14,7 @@ const email = ref('');
 const firstName = ref('');
 const lastName = ref('');
 
-async function createAccount() {
-    isAccountCreated.value = await accountService.createAccount({
-        accountCreateDto: {
-            username: username.value,
-            password: password.value,
-            email: email.value,
-            firstName: firstName.value,
-            lastName: lastName.value
-        }
-    });
-
-    isAccountCreatedError.value = !isAccountCreated.value;
-    if (isAccountCreated) {
-        setTimeout(() => {
-            router.push({
-                name: 'login', params: {
-                    passedUsername: username.value, passedPassword: password.value
-                }
-            });
-        }, 2_250);
-    }
-}
+function createAccount() { }
 </script>
 
 <template>

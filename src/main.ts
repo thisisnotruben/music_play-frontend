@@ -1,7 +1,6 @@
 import { createApp } from 'vue';
 import { createMemoryHistory, createRouter } from 'vue-router';
 import App from './App.vue';
-import { accountService } from './scripts/service';
 import "./style.css";
 import About from './views/About.vue';
 import Account from './views/Account.vue';
@@ -22,10 +21,7 @@ export const router = createRouter({
 });
 
 router.beforeEach(async (to, from) => {
-    if (!await accountService.tokenIsValid()
-        && !['index', 'login'].includes(to.name as string)) {
-        return { name: 'login' };
-    }
+    // TODO
 });
 
 createApp(App).use(router).mount('#app');

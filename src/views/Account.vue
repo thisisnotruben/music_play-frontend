@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import AccountDialogEntry from '@/components/account/AccountDialogEntry.vue';
 import ToolbarLayout from '@/layouts/ToolbarLayout.vue';
-import { accountService } from '@/scripts/service';
 import { KeyRound, Mail, Pencil, User } from '@lucide/vue';
 import { ref } from 'vue';
 
@@ -10,14 +9,6 @@ const password = ref('');
 const email = ref('');
 const firstName = ref('');
 const lastName = ref('');
-
-accountService.getAccountInfo().then((r) => {
-    username.value = r.username ?? '';
-    password.value = '*'.repeat((r.password ?? '').length);
-    email.value = r.email ?? '';
-    firstName.value = r.firstName ?? '';
-    lastName.value = r.lastName ?? '';
-});
 </script>
 
 <template>

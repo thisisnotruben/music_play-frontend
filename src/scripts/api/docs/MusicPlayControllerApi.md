@@ -34,7 +34,14 @@ import type { AddSongToPlaylistRequest } from '';
 
 async function example() {
   console.log("🚀 Testing  SDK...");
-  const api = new MusicPlayControllerApi();
+  const config = new Configuration({ 
+    // To configure HTTP basic authorization: BasicAuth
+    username: "YOUR USERNAME",
+    password: "YOUR PASSWORD",
+    // Configure HTTP bearer authorization: BearerAuth
+    accessToken: "YOUR BEARER TOKEN",
+  });
+  const api = new MusicPlayControllerApi(config);
 
   const body = {
     // number
@@ -69,19 +76,18 @@ example().catch(console.error);
 
 ### Authorization
 
-No authorization required
+[BasicAuth](../README.md#BasicAuth), [BearerAuth](../README.md#BearerAuth)
 
 ### HTTP request headers
 
 - **Content-Type**: Not defined
-- **Accept**: `application/json`, `*/*`
+- **Accept**: `application/json`
 
 
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 | **404** | Song or Playlist not found |  -  |
-| **400** | Bad Request |  -  |
 | **200** | Ok |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
@@ -104,7 +110,14 @@ import type { CreatePlaylistRequest } from '';
 
 async function example() {
   console.log("🚀 Testing  SDK...");
-  const api = new MusicPlayControllerApi();
+  const config = new Configuration({ 
+    // To configure HTTP basic authorization: BasicAuth
+    username: "YOUR USERNAME",
+    password: "YOUR PASSWORD",
+    // Configure HTTP bearer authorization: BearerAuth
+    accessToken: "YOUR BEARER TOKEN",
+  });
+  const api = new MusicPlayControllerApi(config);
 
   const body = {
     // string
@@ -139,19 +152,18 @@ example().catch(console.error);
 
 ### Authorization
 
-No authorization required
+[BasicAuth](../README.md#BasicAuth), [BearerAuth](../README.md#BearerAuth)
 
 ### HTTP request headers
 
 - **Content-Type**: `multipart/form-data`
-- **Accept**: `application/json`, `*/*`
+- **Accept**: `application/json`
 
 
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 | **404** | User not found |  -  |
-| **400** | Bad Request |  -  |
 | **200** | Ok |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
@@ -174,7 +186,14 @@ import type { DeletePlaylistRequest } from '';
 
 async function example() {
   console.log("🚀 Testing  SDK...");
-  const api = new MusicPlayControllerApi();
+  const config = new Configuration({ 
+    // To configure HTTP basic authorization: BasicAuth
+    username: "YOUR USERNAME",
+    password: "YOUR PASSWORD",
+    // Configure HTTP bearer authorization: BearerAuth
+    accessToken: "YOUR BEARER TOKEN",
+  });
+  const api = new MusicPlayControllerApi(config);
 
   const body = {
     // number
@@ -206,19 +225,18 @@ example().catch(console.error);
 
 ### Authorization
 
-No authorization required
+[BasicAuth](../README.md#BasicAuth), [BearerAuth](../README.md#BearerAuth)
 
 ### HTTP request headers
 
 - **Content-Type**: Not defined
-- **Accept**: `application/json`, `*/*`
+- **Accept**: `application/json`
 
 
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 | **404** | User or Playlist not found |  -  |
-| **400** | Bad Request |  -  |
 | **200** | Ok |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
@@ -241,7 +259,14 @@ import type { DeleteSongFromPlaylistRequest } from '';
 
 async function example() {
   console.log("🚀 Testing  SDK...");
-  const api = new MusicPlayControllerApi();
+  const config = new Configuration({ 
+    // To configure HTTP basic authorization: BasicAuth
+    username: "YOUR USERNAME",
+    password: "YOUR PASSWORD",
+    // Configure HTTP bearer authorization: BearerAuth
+    accessToken: "YOUR BEARER TOKEN",
+  });
+  const api = new MusicPlayControllerApi(config);
 
   const body = {
     // number
@@ -276,19 +301,18 @@ example().catch(console.error);
 
 ### Authorization
 
-No authorization required
+[BasicAuth](../README.md#BasicAuth), [BearerAuth](../README.md#BearerAuth)
 
 ### HTTP request headers
 
 - **Content-Type**: Not defined
-- **Accept**: `application/json`, `*/*`
+- **Accept**: `application/json`
 
 
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 | **404** | Song or Playlist not found |  -  |
-| **400** | Bad Request |  -  |
 | **200** | Ok |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
@@ -311,7 +335,14 @@ import type { EditPLaylistRequest } from '';
 
 async function example() {
   console.log("🚀 Testing  SDK...");
-  const api = new MusicPlayControllerApi();
+  const config = new Configuration({ 
+    // To configure HTTP basic authorization: BasicAuth
+    username: "YOUR USERNAME",
+    password: "YOUR PASSWORD",
+    // Configure HTTP bearer authorization: BearerAuth
+    accessToken: "YOUR BEARER TOKEN",
+  });
+  const api = new MusicPlayControllerApi(config);
 
   const body = {
     // number
@@ -349,19 +380,18 @@ example().catch(console.error);
 
 ### Authorization
 
-No authorization required
+[BasicAuth](../README.md#BasicAuth), [BearerAuth](../README.md#BearerAuth)
 
 ### HTTP request headers
 
 - **Content-Type**: `multipart/form-data`
-- **Accept**: `application/json`, `*/*`
+- **Accept**: `application/json`
 
 
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 | **404** | User or playlist not found |  -  |
-| **400** | Bad Request |  -  |
 | **200** | Ok |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
@@ -384,7 +414,14 @@ import type { GetAlbumRequest } from '';
 
 async function example() {
   console.log("🚀 Testing  SDK...");
-  const api = new MusicPlayControllerApi();
+  const config = new Configuration({ 
+    // To configure HTTP basic authorization: BasicAuth
+    username: "YOUR USERNAME",
+    password: "YOUR PASSWORD",
+    // Configure HTTP bearer authorization: BearerAuth
+    accessToken: "YOUR BEARER TOKEN",
+  });
+  const api = new MusicPlayControllerApi(config);
 
   const body = {
     // number
@@ -416,7 +453,7 @@ example().catch(console.error);
 
 ### Authorization
 
-No authorization required
+[BasicAuth](../README.md#BasicAuth), [BearerAuth](../README.md#BearerAuth)
 
 ### HTTP request headers
 
@@ -428,7 +465,6 @@ No authorization required
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 | **404** | Not Found |  -  |
-| **400** | Bad Request |  -  |
 | **200** | OK |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
@@ -451,7 +487,14 @@ import type { GetAlbumsRequest } from '';
 
 async function example() {
   console.log("🚀 Testing  SDK...");
-  const api = new MusicPlayControllerApi();
+  const config = new Configuration({ 
+    // To configure HTTP basic authorization: BasicAuth
+    username: "YOUR USERNAME",
+    password: "YOUR PASSWORD",
+    // Configure HTTP bearer authorization: BearerAuth
+    accessToken: "YOUR BEARER TOKEN",
+  });
+  const api = new MusicPlayControllerApi(config);
 
   try {
     const data = await api.getAlbums();
@@ -475,7 +518,7 @@ This endpoint does not need any parameter.
 
 ### Authorization
 
-No authorization required
+[BasicAuth](../README.md#BasicAuth), [BearerAuth](../README.md#BearerAuth)
 
 ### HTTP request headers
 
@@ -487,7 +530,6 @@ No authorization required
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 | **404** | Not Found |  -  |
-| **400** | Bad Request |  -  |
 | **200** | Ok |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
@@ -510,7 +552,14 @@ import type { GetArtistsRequest } from '';
 
 async function example() {
   console.log("🚀 Testing  SDK...");
-  const api = new MusicPlayControllerApi();
+  const config = new Configuration({ 
+    // To configure HTTP basic authorization: BasicAuth
+    username: "YOUR USERNAME",
+    password: "YOUR PASSWORD",
+    // Configure HTTP bearer authorization: BearerAuth
+    accessToken: "YOUR BEARER TOKEN",
+  });
+  const api = new MusicPlayControllerApi(config);
 
   try {
     const data = await api.getArtists();
@@ -534,7 +583,7 @@ This endpoint does not need any parameter.
 
 ### Authorization
 
-No authorization required
+[BasicAuth](../README.md#BasicAuth), [BearerAuth](../README.md#BearerAuth)
 
 ### HTTP request headers
 
@@ -546,7 +595,6 @@ No authorization required
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 | **404** | Not Found |  -  |
-| **400** | Bad Request |  -  |
 | **200** | Ok |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
@@ -569,7 +617,14 @@ import type { GetExploreFeedRequest } from '';
 
 async function example() {
   console.log("🚀 Testing  SDK...");
-  const api = new MusicPlayControllerApi();
+  const config = new Configuration({ 
+    // To configure HTTP basic authorization: BasicAuth
+    username: "YOUR USERNAME",
+    password: "YOUR PASSWORD",
+    // Configure HTTP bearer authorization: BearerAuth
+    accessToken: "YOUR BEARER TOKEN",
+  });
+  const api = new MusicPlayControllerApi(config);
 
   try {
     const data = await api.getExploreFeed();
@@ -593,19 +648,18 @@ This endpoint does not need any parameter.
 
 ### Authorization
 
-No authorization required
+[BasicAuth](../README.md#BasicAuth), [BearerAuth](../README.md#BearerAuth)
 
 ### HTTP request headers
 
 - **Content-Type**: Not defined
-- **Accept**: `application/json`, `*/*`
+- **Accept**: `application/json`
 
 
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 | **404** | User not found |  -  |
-| **400** | Bad Request |  -  |
 | **200** | Ok |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
@@ -628,7 +682,14 @@ import type { GetPlaylistsRequest } from '';
 
 async function example() {
   console.log("🚀 Testing  SDK...");
-  const api = new MusicPlayControllerApi();
+  const config = new Configuration({ 
+    // To configure HTTP basic authorization: BasicAuth
+    username: "YOUR USERNAME",
+    password: "YOUR PASSWORD",
+    // Configure HTTP bearer authorization: BearerAuth
+    accessToken: "YOUR BEARER TOKEN",
+  });
+  const api = new MusicPlayControllerApi(config);
 
   try {
     const data = await api.getPlaylists();
@@ -652,19 +713,18 @@ This endpoint does not need any parameter.
 
 ### Authorization
 
-No authorization required
+[BasicAuth](../README.md#BasicAuth), [BearerAuth](../README.md#BearerAuth)
 
 ### HTTP request headers
 
 - **Content-Type**: Not defined
-- **Accept**: `application/json`, `*/*`
+- **Accept**: `application/json`
 
 
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 | **404** | User not found |  -  |
-| **400** | Bad Request |  -  |
 | **200** | Ok |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)

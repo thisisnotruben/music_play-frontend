@@ -8,7 +8,6 @@ provide('searchResultSelected', searchEntrySelected);
 provide('appName', 'Music Play');
 </script>
 
-<!-- <link rel="icon" type="image/svg+xml" href="/favicon.ico" /> -->
 <template>
     <div class="main-container flex flex-col">
         <Header @entry-selected="(e) => searchEntrySelected = e"></Header>

@@ -1,16 +1,13 @@
 <script setup lang="ts">
 import BaseLayout from '@/layouts/BaseLayout.vue';
-import { accountService } from '@/scripts/service';
 import { Ban, Eye, EyeClosed, Info, KeyRound, LogIn, User, UserPlus } from '@lucide/vue';
 import { ref, watch } from 'vue';
-import { useRouter } from 'vue-router';
 
 const props = defineProps<{
     passedUsername?: string,
     passedPassword?: string
 }>();
 
-const router = useRouter();
 
 const textView = ref(false);
 const isSuccessfulLogin = ref(true);
@@ -31,12 +28,7 @@ if (props.passedUsername && props.passedPassword) {
     });
 }
 
-async function login() {
-    isSuccessfulLogin.value = await accountService.login({ username: username.value, password: password.value });
-    if (isSuccessfulLogin.value) {
-        router.push({ name: 'home' });
-    }
-}
+async function login() { }
 </script>
 
 <template>

@@ -25,7 +25,14 @@ import type { GetSearchRequest } from '';
 
 async function example() {
   console.log("🚀 Testing  SDK...");
-  const api = new SearchControllerApi();
+  const config = new Configuration({ 
+    // To configure HTTP basic authorization: BasicAuth
+    username: "YOUR USERNAME",
+    password: "YOUR PASSWORD",
+    // Configure HTTP bearer authorization: BearerAuth
+    accessToken: "YOUR BEARER TOKEN",
+  });
+  const api = new SearchControllerApi(config);
 
   const body = {
     // string
@@ -60,7 +67,7 @@ example().catch(console.error);
 
 ### Authorization
 
-No authorization required
+[BasicAuth](../README.md#BasicAuth), [BearerAuth](../README.md#BearerAuth)
 
 ### HTTP request headers
 
@@ -72,7 +79,6 @@ No authorization required
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 | **404** | Not Found |  -  |
-| **400** | Bad Request |  -  |
 | **200** | Ok |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)

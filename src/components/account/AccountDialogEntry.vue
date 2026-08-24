@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { accountService } from '@/scripts/service';
 import { CircleX, Eye, EyeClosed, KeyRound, Mail, Save, User } from '@lucide/vue';
 import { ref } from 'vue';
 
@@ -19,25 +18,6 @@ const emit = defineEmits({
 
 const field = ref('');
 function fieldSubmitted() {
-    switch (props.type) {
-        case "username":
-            accountService.editUsername({ username: field.value });
-            break;
-        case "password":
-            accountService.editPassword({ password: field.value });
-            break;
-        case "email":
-            accountService.editEmail({ email: field.value });
-            break;
-        case "firstName":
-            accountService.editFirstName({ firstName: field.value });
-            break;
-        case "lastName":
-            accountService.editLastName({ lastName: field.value });
-            break;
-        default:
-            return;
-    }
     eval(`document.querySelector('#${props.id}').close();`);
     emit('fieldChanged', field.value);
 }

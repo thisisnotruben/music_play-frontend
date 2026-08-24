@@ -1,13 +1,12 @@
-import { AccountControllerApi, Configuration, MusicPlayControllerApi, SearchControllerApi, type AddSongToPlaylistRequest, type AlbumDto, type AppUserDto, type CreateAccountRequest, type CreatePlaylistRequest, type DeletePlaylistRequest, type DeleteSongFromPlaylistRequest, type EditEmailRequest, type EditFirstNameRequest, type EditLastNameRequest, type EditPasswordRequest, type EditPLaylistRequest, type EditUsernameRequest, type GetAlbumRequest, type GetSearchRequest, type LoginRequest, type PlaylistDto, type SongDto } from './api/index';
+import { Configuration, MusicPlayControllerApi, SearchControllerApi, type AddSongToPlaylistRequest, type AlbumDto, type ConfigurationParameters, type CreatePlaylistRequest, type DeletePlaylistRequest, type DeleteSongFromPlaylistRequest, type EditPLaylistRequest, type GetAlbumRequest, type GetSearchRequest, type SongDto } from './api/index';
 import { BLANK_SONG_CONTAINER, Player, SongContainer, SongContainerTypes } from './shared';
-
 
 const apiAppCoverStorageUrl: string = import.meta.env.VITE_API_APP_COVER_STORAGE_URL;
 const apiAppAudioStorageUrl: string = import.meta.env.VITE_API_APP_AUDIO_STORAGE_URL;
 const apiUserStorageUrl: string = import.meta.env.VITE_API_USER_STORAGE_URL;
-const config = new Configuration({
-    basePath: import.meta.env.VITE_API_URL,
-});
+
+const configProps: ConfigurationParameters = { basePath: import.meta.env.VITE_API_URL }
+const config = new Configuration(configProps);
 
 export function getFullPath(coverPath: string, urlPath = apiAppCoverStorageUrl): string {
     return coverPath.length > 0 ? `${urlPath}/${coverPath}` : '';
@@ -100,74 +99,6 @@ class MusicPlayService {
 
 }
 
-class AccountService {
-
-    constructor(private api = new AccountControllerApi(config)) { }
-
-    getUsername(): string {
-        return '';
-    }
-
-    setToken(token: string) {
-
-    }
-
-    async tokenIsValid(): Promise<boolean> {
-        return true;
-    }
-
-    async createAccount(requestParameters: CreateAccountRequest): Promise<boolean> {
-        let isAccountCreated = false;
-        try {
-            await this.api.createAccount(requestParameters);
-            isAccountCreated = true;
-        } catch (error) { }
-        finally {
-            return isAccountCreated
-        }
-    }
-
-    async getAccountInfo(): Promise<AppUserDto> {
-        return await this.api.getAccountInfo();
-    }
-
-    async login(requestParameters: LoginRequest): Promise<boolean> {
-        let token = '';
-
-        try {
-            const response = await this.api.login(requestParameters);
-            if (response.token) {
-                token = response.token;
-            }
-        } catch (error) { }
-        finally {
-            this.setToken(token);
-            return token.length > 0;
-        }
-    }
-
-    editUsername(requestParameters: EditUsernameRequest) {
-        this.api.editUsername(requestParameters);
-    }
-
-    editPassword(requestParameters: EditPasswordRequest) {
-        this.api.editPassword(requestParameters);
-    }
-
-    editEmail(requestParameters: EditEmailRequest) {
-        this.api.editEmail(requestParameters);
-    }
-
-    editFirstName(requestParameters: EditFirstNameRequest) {
-        this.api.editFirstName(requestParameters);
-    }
-
-    editLastName(requestParameters: EditLastNameRequest) {
-        this.api.editLastName(requestParameters);
-    }
-
-}
-
 class SearchService {
 
     constructor(private api = new SearchControllerApi(config)) { }
@@ -194,6 +125,5 @@ class SearchService {
 }
 
 export const musicPlayService = new MusicPlayService();
-export const accountService = new AccountService();
 export const searchService = new SearchService();
 export const playerService = new Player(apiAppAudioStorageUrl);
