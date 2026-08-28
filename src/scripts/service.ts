@@ -1,12 +1,15 @@
-import { Configuration, MusicPlayControllerApi, SearchControllerApi, type AddSongToPlaylistRequest, type AlbumDto, type ConfigurationParameters, type CreatePlaylistRequest, type DeletePlaylistRequest, type DeleteSongFromPlaylistRequest, type EditPLaylistRequest, type GetAlbumRequest, type GetSearchRequest, type SongDto } from './api/index';
+import { useAuthStore } from '@/stores/auth';
+import { Configuration, MusicPlayControllerApi, SearchControllerApi, type AddSongToPlaylistRequest, type AlbumDto, type CreatePlaylistRequest, type DeletePlaylistRequest, type DeleteSongFromPlaylistRequest, type EditPLaylistRequest, type GetAlbumRequest, type GetSearchRequest, type SongDto } from './api/index';
 import { BLANK_SONG_CONTAINER, Player, SongContainer, SongContainerTypes } from './shared';
 
 const apiAppCoverStorageUrl: string = import.meta.env.VITE_API_APP_COVER_STORAGE_URL;
 const apiAppAudioStorageUrl: string = import.meta.env.VITE_API_APP_AUDIO_STORAGE_URL;
 const apiUserStorageUrl: string = import.meta.env.VITE_API_USER_STORAGE_URL;
 
-const configProps: ConfigurationParameters = { basePath: import.meta.env.VITE_API_URL }
-const config = new Configuration(configProps);
+const config = new Configuration({
+    basePath: import.meta.env.VITE_API_URL,
+    accessToken: () => useAuthStore().token ?? ''
+});
 
 export function getFullPath(coverPath: string, urlPath = apiAppCoverStorageUrl): string {
     return coverPath.length > 0 ? `${urlPath}/${coverPath}` : '';
